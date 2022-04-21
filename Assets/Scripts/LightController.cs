@@ -28,7 +28,6 @@ public class LightController : MonoBehaviour
 
             float intensity = maxIntensity * Mathf.Sin(frequency * time) + maxIntensity;
             light.intensity = intensity;
-            Debug.Log(intensity);
 
             time -= Time.deltaTime;
 
