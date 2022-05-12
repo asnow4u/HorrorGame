@@ -17,9 +17,11 @@ public class KeyController : MonoBehaviour
     public int goldKeyStartCount; //Harder to find keys
     public int silverKeyStartCount; //Easier to find keys
 
-    public int goldKeysCount;
-    public int silverKeysCount;
-    
+    public int goldKeyHeldCount;
+    public int silverKeyHeldCount;
+
+    public int goldKeyUsedCount;
+    public int silverKeyUsedCount;
 
     private void Awake()
     {
@@ -45,17 +47,43 @@ public class KeyController : MonoBehaviour
     }
 
 
-    public void IncrementSilverKey()
+    public int HeldSilverKeys
     {
-        silverKeysCount++;
+        get { return silverKeyHeldCount; }
+        set { silverKeyHeldCount = value; }
+    }
+
+    public int HeldGoldKeys
+    {
+        get { return goldKeyHeldCount; }
+        set { goldKeyHeldCount = value; }
     }
 
 
-    public void IncrementGoldKey()
+    public int UsedSilverKeys
     {
-        goldKeysCount++;
+        get { return silverKeyUsedCount; }
+        set { silverKeyUsedCount = value; }
     }
 
+    public int UsedGoldKeys
+    {
+        get { return goldKeyUsedCount; }
+        set { goldKeyUsedCount = value; }
+    }
+
+
+    public bool KeysFound()
+    {
+        if (goldKeyUsedCount == goldKeyStartCount && silverKeyUsedCount == silverKeyStartCount)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public void SpawnKeys()
     {

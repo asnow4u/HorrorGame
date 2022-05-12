@@ -22,11 +22,11 @@ public class Key : MonoBehaviour
 
                     if (isGold)
                     {
-                        KeyController.instance.IncrementGoldKey();
+                        KeyController.instance.HeldGoldKeys++;
                     }
                     else
                     {
-                        KeyController.instance.IncrementSilverKey();
+                        KeyController.instance.HeldSilverKeys++;
                     }
 
                     Destroy(gameObject);

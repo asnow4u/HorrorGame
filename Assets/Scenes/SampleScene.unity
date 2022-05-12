@@ -2054,6 +2054,10 @@ PrefabInstance:
       propertyPath: walkSpeed
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 762125441, guid: ae8ee8eed0a676049a77cd3b958933a9, type: 3}
+      propertyPath: m_Height
+      value: 5.8
+      objectReference: {fileID: 0}
     - target: {fileID: 5670275562891245701, guid: ae8ee8eed0a676049a77cd3b958933a9, type: 3}
       propertyPath: m_RootOrder
       value: 4
