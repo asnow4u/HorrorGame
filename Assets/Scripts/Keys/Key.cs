@@ -4,13 +4,34 @@ using UnityEngine;
 
 public class Key : MonoBehaviour
 {
+    public bool isGold;
 
-    public void OnTriggerEnter(Collider other)
+
+    public void OnTriggerStay(Collider col)
     {
-        if (other.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Player")
         {
-            KeyController.instance.AddGrabbedKey(gameObject);
-            Destroy(gameObject);
+
+            if (GetComponent<Renderer>().isVisible)
+            {
+                Debug.Log("Press E to Pick up");
+
+                if (Input.GetKey(KeyCode.E))
+                {
+                    Debug.Log("Key Grabbed");
+
+                    if (isGold)
+                    {
+                        KeyController.instance.IncrementGoldKey();
+                    }
+                    else
+                    {
+                        KeyController.instance.IncrementSilverKey();
+                    }
+
+                    Destroy(gameObject);
+                }
+            }
         }
     }
 }

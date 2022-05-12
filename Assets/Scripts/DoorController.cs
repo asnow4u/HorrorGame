@@ -112,8 +112,8 @@ public class DoorController : MonoBehaviour
 
         //Motor
         JointMotor motor = new JointMotor();
-        motor.force = 0;
-        motor.targetVelocity = 0;
+        motor.force = motorForce;
+        motor.targetVelocity = motorVelocity;
 
         hinge.useSpring = false;
         hinge.useMotor = false;

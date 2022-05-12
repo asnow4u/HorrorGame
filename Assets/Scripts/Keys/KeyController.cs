@@ -7,12 +7,19 @@ public class KeyController : MonoBehaviour
 
     public static KeyController instance;
 
-    [SerializeField] private List<GameObject> keyPrefabs = new List<GameObject>();
-    private List<GameObject> keys = new List<GameObject>();
+    [SerializeField] private GameObject goldKeyPrefab;
+    [SerializeField] private GameObject silverKeyPrefab;
+    [SerializeField] private Transform locationParent;
+    
+    private List<Transform> keyLocations = new List<Transform>();
 
-    public int keyCount; //TODO: make private
+    //TODO: make private
+    public int goldKeyStartCount; //Harder to find keys
+    public int silverKeyStartCount; //Easier to find keys
 
-    public List<int> grabbedKeys = new List<int>(); //TODO: Make private
+    public int goldKeysCount;
+    public int silverKeysCount;
+    
 
     private void Awake()
     {
@@ -20,7 +27,6 @@ public class KeyController : MonoBehaviour
         {
             instance = this;
         }    
-
         else
         {
             Destroy(this);
@@ -30,52 +36,41 @@ public class KeyController : MonoBehaviour
 
     void Start()
     {
+        foreach (Transform child in locationParent)
+        {
+            keyLocations.Add(child);
+        }
+
         SpawnKeys();
     }
 
 
-    #region Getter / Setter
-
-    public int GetKeyCount()
+    public void IncrementSilverKey()
     {
-        return keyCount;
+        silverKeysCount++;
     }
 
 
-    public void AddGrabbedKey(GameObject key)
+    public void IncrementGoldKey()
     {
-        Debug.Log(key.name);
-        for(int i=0; i<keyCount; i++)
-        {
-            if (keys[i] == key)
-            {
-                if (grabbedKeys.Contains(i)) return;
-                grabbedKeys.Add(i);
-            }
-        }
-    }
-
-    #endregion
-
-
-
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        goldKeysCount++;
     }
 
 
     public void SpawnKeys()
     {
-        for (int i=0; i<keyCount; i++)
+        for (int i=0; i<goldKeyStartCount; i++)
         {
-            //TODO: Will need to spawn randomly on a navmesh
+            int rand = Random.Range(0, keyLocations.Count);
+            GameObject key = Instantiate(goldKeyPrefab, keyLocations[rand]);
+            keyLocations.Remove(keyLocations[rand]);
+        }
 
-            GameObject key = Instantiate(keyPrefabs[i], new Vector3(0 + Random.Range(0, 20), 0, Random.Range(-10, 10)), Quaternion.identity);
-            keys.Add(key);
+        for (int i = 0; i < silverKeyStartCount; i++)
+        {
+            int rand = Random.Range(0, keyLocations.Count);
+            GameObject key = Instantiate(silverKeyPrefab, keyLocations[rand]);
+            keyLocations.Remove(keyLocations[rand]);
         }
     }
 }
