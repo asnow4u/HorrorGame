@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3826753937855638215}
   - component: {fileID: 4265890572413294747}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RampCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &3826753937855638215
 Transform:
@@ -38,7 +38,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3114468326420334350}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: fb1aeaf6f5ce0b148b3da1622cfc2dd0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -54,12 +54,12 @@ GameObject:
   m_Component:
   - component: {fileID: 6666619676053385308}
   - component: {fileID: 6772768516536473172}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SideCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6666619676053385308
 Transform:
@@ -98,12 +98,12 @@ GameObject:
   m_Component:
   - component: {fileID: 7921377409452209077}
   - component: {fileID: 7979518314245893744}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SideCollider (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7921377409452209077
 Transform:
@@ -141,12 +141,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8545229229154433528}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8545229229154433528
 Transform:
@@ -176,12 +176,12 @@ GameObject:
   - component: {fileID: 8708175796268399155}
   - component: {fileID: 5725900500175713686}
   - component: {fileID: 7535238384367993180}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: StairsGarage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8708175796268399155
 Transform:
