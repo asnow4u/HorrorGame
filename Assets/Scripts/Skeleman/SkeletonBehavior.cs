@@ -55,22 +55,72 @@ public class SkeletonBehavior : MonoBehaviour
      * If the skeleman sees the player run into a hiding spot, they will be caught     
     */
 
+    public static SkeletonBehavior instance;
+
+    [SerializeField] private Transform dormatObj;
+    [SerializeField] private Transform observeObj;
+
+    private List<Transform> dormatLocations = new List<Transform>();
+    private List<Transform> observeLocations = new List<Transform>();
+
+    private RoomController.Room curRoom;
 
     private enum State {dorment, observe, wander, hunt, chase};
     private State state;
 
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+
+        foreach (Transform location in dormatObj)
+        {
+            dormatLocations.Add(location);
+        }
+
+
         state = State.dorment;
     }
 
-
-    // Update is called once per frame
-    void Update()
+    public void SetRoom(RoomController.Room room)
     {
-        
+        curRoom = room;
     }
 
+
+    private void Update()
+    {
+        
+        if (state == State.dorment)
+        {
+
+        }
+
+
+        else if (state == State.observe)
+        {
+
+        }
+
+
+        else if (state == State.wander)
+        {
+
+
+        }
+
+    }
 
 }
