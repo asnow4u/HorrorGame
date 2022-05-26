@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 949523335366613716}
   - component: {fileID: 3158631523767209352}
   - component: {fileID: 3158631523767209351}
-  - component: {fileID: 1627353771290608897}
   - component: {fileID: 1832572630691283321}
   - component: {fileID: 9218188653358520855}
   m_Layer: 7
@@ -117,18 +116,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.23430216, y: 0.70333594, z: 0.15762869}
   m_Center: {x: -0.0086903935, y: 0.1318159, z: 0.011603608}
---- !u!114 &1627353771290608897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 949523335374039186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97afd27319be3fb4a9079fed00a83311, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1832572630691283321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,7 +123,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 949523335374039186}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf0bfdfec7e82e44cbcd14d7e28e63c9, type: 3}
   m_Name: 
@@ -149,7 +136,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 949523335374039186}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.25
   m_Speed: 3.5

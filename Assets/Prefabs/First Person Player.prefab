@@ -144,7 +144,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e136e08d8e0dd3444ae68dc08974a52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  walkSpeed: 5
+  runSpeed: 10
 --- !u!54 &762125442
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -172,6 +173,6 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 2.3
+  m_Height: 5.8
   m_Direction: 1
   m_Center: {x: 0, y: -0.61622906, z: 0}
