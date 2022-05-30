@@ -57,20 +57,23 @@ public class SkeletonBehavior : MonoBehaviour
 
     public static SkeletonBehavior instance;
 
+    [SerializeField] private GameObject skeleton;
     [SerializeField] private Transform dormatObj;
     [SerializeField] private Transform observeObj;
 
+    [SerializeField] private float dormantTimer;
+    
     private List<Transform> dormatLocations = new List<Transform>();
     private List<Transform> observeLocations = new List<Transform>();
 
-    private RoomController.Room curRoom;
+    public enum State {dormant, observe, wander, hunt, chase};
+    public State state;
 
-    private enum State {dorment, observe, wander, hunt, chase};
-    private State state;
-
+    private bool timerFinished;
 
     private void Awake()
     {
+
         if (instance == null)
         {
             instance = this;
@@ -79,11 +82,6 @@ public class SkeletonBehavior : MonoBehaviour
         {
             Destroy(this);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
 
         foreach (Transform location in dormatObj)
         {
@@ -91,36 +89,100 @@ public class SkeletonBehavior : MonoBehaviour
         }
 
 
-        state = State.dorment;
-    }
+        state = State.dormant;
 
-    public void SetRoom(RoomController.Room room)
-    {
-        curRoom = room;
+        StartCoroutine(Wait(dormantTimer));
     }
 
 
     private void Update()
     {
-        
-        if (state == State.dorment)
-        {
 
+        switch(state)
+        {
+            case State.dormant:
+                UpdateDormant();
+                break;
+
+            case State.observe:
+                UpdateObserve();
+                break;
+
+            case State.wander:
+                UpdateWander();
+                break;
+
+            case State.hunt:
+                UpdateHunt();
+                break;
+
+            case State.chase:
+                UpdateChase();
+                break;
+        }
+    }
+
+
+    private void UpdateDormant()
+    {
+        if (!timerFinished) return;
+        if (RoomController.instance.PlayerRoom == RoomController.instance.SkeletonRoom) return;
+        if (PlayerController.instance.InViewOfCamera(skeleton.transform.position)) return;
+
+        List<Transform> availbleSpots = new List<Transform>();
+
+        foreach (Transform transform in dormatLocations)
+        {
+            RoomController.RoomType room = RoomController.instance.GetRoom(transform.position);
+
+            if (room == RoomController.instance.SkeletonRoom) continue;
+            if (room == RoomController.instance.PlayerRoom) continue;
+            if (PlayerController.instance.InViewOfCamera(transform.position)) continue;
+
+            availbleSpots.Add(transform);
         }
 
+        int rand = Random.Range(0, availbleSpots.Count);
 
-        else if (state == State.observe)
-        {
+        skeleton.transform.position = availbleSpots[rand].position;
+        //TODO: Rotation
 
-        }
-
-
-        else if (state == State.wander)
-        {
+        StartCoroutine(Wait(dormantTimer));
+    }
 
 
-        }
+    private void UpdateObserve()
+    {
+       
+     
+    } 
+
+
+    private void UpdateWander()
+    {
 
     }
 
+
+    private void UpdateHunt()
+    {
+
+    }
+
+
+    private void UpdateChase()
+    {
+
+    }
+
+
+
+    private IEnumerator Wait(float time)
+    {
+        timerFinished = false;
+
+        yield return new WaitForSeconds(time);
+
+        timerFinished = true;
+    }
 }

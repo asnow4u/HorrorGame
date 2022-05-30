@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Room : MonoBehaviour
 {
-    [SerializeField] private RoomController.Room room;
+    [SerializeField] private RoomController.RoomType room;
     [SerializeField] private int hidingSpots;
     [SerializeField] private List<Light> lights = new List<Light>();
 
@@ -16,11 +16,22 @@ public class Room : MonoBehaviour
     }
 
 
+    public RoomController.RoomType GetRoom()
+    {
+        return room;
+    }
+
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            controller.SetRoom(room);
+            controller.PlayerRoom = room;
+        }
+
+        if (other.gameObject.tag == "Skeleman")
+        {
+            controller.SkeletonRoom = room;
         }
     }
 
@@ -29,9 +40,12 @@ public class Room : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            controller.SetRoom(RoomController.Room.None);
+            controller.PlayerRoom = RoomController.RoomType.None;
+        }
+
+        if (other.gameObject.tag == "Skeleman")
+        {   
+            controller.SkeletonRoom = RoomController.RoomType.None;
         }
     }
-
-
 }
