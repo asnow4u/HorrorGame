@@ -160,7 +160,11 @@ public class SkeletonBehavior : MonoBehaviour
 
     private void UpdateWander()
     {
-
+        //TODO: travel to destination
+        //Once destination is reached set new destination
+        //Doors should automatically open and close for skeleman
+        //Go to curtain spots, look around, occationally look at a hiding spot
+        //! during this stage if check a hiding spot, should not check one the player is in
     }
 
 

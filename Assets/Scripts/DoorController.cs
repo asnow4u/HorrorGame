@@ -4,122 +4,130 @@ using UnityEngine;
 
 public class DoorController : MonoBehaviour
 {
-    private HingeJoint hinge;
 
+    [SerializeField] private Transform door;
+    
+    private HingeJoint hinge;
+    
     //Limit
     private float maxLimit;
     private float minLimit;
-    private float bouceLimit;
 
     //Spring
-    private float springTarget;
     private float springForce;
-    private float springDamp;
-
-    //Motor
-    private float motorVelocity;
-    private float motorForce;
-    
 
     //Debug
-    public bool forceClose;
-    public bool reset;
+    public float force;
     public bool forceOpen;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        hinge = GetComponent<HingeJoint>();
+        hinge = door.GetComponent<HingeJoint>();
 
         //Limit
         maxLimit = hinge.limits.max;
         minLimit = hinge.limits.min;
-        bouceLimit = hinge.limits.bounciness;
 
         //Spring
-        springTarget = hinge.spring.targetPosition;
         springForce = hinge.spring.spring;
-        springDamp = hinge.spring.damper;
-
-        //Motor
-        motorVelocity = hinge.motor.targetVelocity;
-        motorForce = hinge.motor.force;
     }
 
     private void Update()
     {
-        if (forceClose)
-        {
-            ForceClose();
-        }
-
         if (forceOpen)
         {
-            ForceOpen();
-        }
-
-        if (reset)
-        {
-            Reset();
-            reset = false;
+            forceOpen = false;
+            ForceOpen(force);
         }
     }
 
 
-    public void ForceClose()
+    public void ForceOpen(float openForce)
     {
-        JointLimits limit = new JointLimits();
-        limit.min = hinge.limits.min;
-        limit.max = hinge.limits.max;
-        limit.bounciness = 0;
-
         JointSpring spring = new JointSpring();
-        spring.targetPosition = 0;
-        spring.spring = 100;
-        spring.damper = 0;
 
-        hinge.limits = limit;
+        if (openForce > 0)
+        {
+            spring.targetPosition = minLimit;
+            spring.spring = Mathf.Abs(openForce);
+        }
+
+        else
+        {
+            spring.targetPosition = maxLimit;
+            spring.spring = Mathf.Abs(openForce);
+        }
+
         hinge.spring = spring;
         hinge.useSpring = true;
     }
 
 
-    public void ForceOpen()
+    private void OnTriggerEnter(Collider col)
     {
-        JointMotor motor = new JointMotor();
-        motor.force = 50;
-        motor.targetVelocity = 20;
-        
-        hinge.motor = motor;
-        hinge.useMotor = true;
+        if (col.gameObject.tag == "Skeleman" || col.gameObject.tag == "Player")
+        {
+            JointLimits limit = new JointLimits();
+            limit.min = minLimit;
+            limit.max = maxLimit;
+
+            hinge.useSpring = false;
+            hinge.limits = limit;
+        }
+
+
+        if (col.gameObject.tag == "Skeleman")
+        {
+            JointSpring spring = new JointSpring();
+            
+            Vector3 dir = transform.InverseTransformPoint(col.transform.position);
+            
+            if (dir.x > 0)
+            {
+                spring.targetPosition = minLimit;
+                spring.spring = springForce;
+            }
+
+            else
+            {
+                spring.targetPosition = maxLimit;
+                spring.spring = springForce;
+            }
+
+            hinge.spring = spring;
+            hinge.useSpring = true;
+        }
     }
 
 
-    public void Reset()
+    private void OnTriggerExit(Collider col)
     {
-        //Limit
-        JointLimits limit = new JointLimits();
-        limit.min = minLimit;
-        limit.max = maxLimit;
-        limit.bounciness = bouceLimit;
+        
+        if (col.gameObject.tag == "Skeleman" || col.gameObject.tag == "Player")
+        {
+            JointSpring spring = new JointSpring();
+            JointLimits limit = new JointLimits();
 
-        //Spring
-        JointSpring spring = new JointSpring();
-        spring.targetPosition = springTarget;
-        spring.spring = springForce;
-        spring.damper = springDamp;
+            if (door.rotation.z < 0)
+            {
+                limit.min = 0;
+                limit.max = maxLimit;
+            }
 
-        //Motor
-        JointMotor motor = new JointMotor();
-        motor.force = motorForce;
-        motor.targetVelocity = motorVelocity;
+            else
+            {
+                limit.max = 0;
+                limit.min = minLimit;
+            }
 
-        hinge.useSpring = false;
-        hinge.useMotor = false;
+            spring.targetPosition = 0;
+            spring.spring = col.gameObject.tag == "Skeleman" ? springForce : 5;
 
-        hinge.limits = limit;
-        hinge.spring = spring;
-        hinge.motor = motor;
+            hinge.limits = limit;
+            hinge.spring = spring;
+            hinge.useSpring = true;
+        }        
     }
 }
