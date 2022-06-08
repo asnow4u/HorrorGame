@@ -126,20 +126,28 @@ public class SkeletonBehavior : MonoBehaviour
     private void UpdateDormant()
     {
         if (!timerFinished) return;
-        if (RoomController.instance.PlayerRoom == RoomController.instance.SkeletonRoom) return;
         if (PlayerController.instance.InViewOfCamera(skeleton.transform.position)) return;
+
+        Room playerRoom = RoomController.instance.PlayerRoom;
+        Room skeletonRoom = RoomController.instance.SkeletonRoom;
+
+        if (playerRoom == null) return;
+        if (skeletonRoom != null && playerRoom.Type == skeletonRoom.Type) return;
 
         List<Transform> availbleSpots = new List<Transform>();
 
-        foreach (Transform transform in dormatLocations)
+        foreach (Room room in RoomController.instance.Rooms)
         {
-            RoomController.RoomType room = RoomController.instance.GetRoom(transform.position);
+            if (skeletonRoom != null && room.Type == skeletonRoom.Type) continue;
+            if (room.Type == playerRoom.Type) continue;
 
-            if (room == RoomController.instance.SkeletonRoom) continue;
-            if (room == RoomController.instance.PlayerRoom) continue;
-            if (PlayerController.instance.InViewOfCamera(transform.position)) continue;
-
-            availbleSpots.Add(transform);
+            foreach (Transform transform in room.DormantSpots)
+            {
+                if (!PlayerController.instance.InViewOfCamera(transform.position))
+                {
+                    availbleSpots.Add(transform);
+                }
+            }
         }
 
         int rand = Random.Range(0, availbleSpots.Count);
@@ -162,7 +170,6 @@ public class SkeletonBehavior : MonoBehaviour
     {
         //TODO: travel to destination
         //Once destination is reached set new destination
-        //Doors should automatically open and close for skeleman
         //Go to curtain spots, look around, occationally look at a hiding spot
         //! during this stage if check a hiding spot, should not check one the player is in
     }

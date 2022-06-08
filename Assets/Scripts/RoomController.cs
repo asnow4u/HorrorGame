@@ -6,11 +6,12 @@ public class RoomController : MonoBehaviour
 {
     public static RoomController instance;
     public enum RoomType { LivingRoom, Kitchen, Bathroom, Garage, Pantry, MasterBedroom, Office, UpstairsBathroom, Bedroom, None };
+    
+    private List<Room> rooms;
 
-    private RoomType playerCurRoom;
-    private RoomType skeletonCurRoom;
+    private Room playerCurRoom;
+    private Room skeletonCurRoom;
 
-    private List<BoxCollider> colliders;
 
 
     private void Awake()
@@ -25,44 +26,54 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        colliders = new List<BoxCollider>();
 
-        foreach (Transform room in transform)
+    private void Start()
+    {
+        rooms = new List<Room>();
+
+        foreach (Transform child in transform)
         {
-            BoxCollider collider = room.GetComponent<BoxCollider>();
-            colliders.Add(collider);
-        }
+            Room room;
+            if (child.TryGetComponent<Room>(out room))
+            {
+                rooms.Add(room);
+            }
+        }    
     }
 
-    
-    public RoomType PlayerRoom
+
+    #region Getter / Setter
+
+    public Room PlayerRoom
     {
         get { return playerCurRoom; }
         set { playerCurRoom = value; }
     }
 
-
-    public RoomType SkeletonRoom
+    public Room SkeletonRoom
     {
         get { return skeletonCurRoom; }
         set { skeletonCurRoom = value; }
     }
 
-
-    public RoomType GetRoom(Vector3 pos)
+    public List<Room> Rooms
     {
-        foreach(Transform room in transform)
+        get { return rooms; }
+    }
+
+    #endregion
+
+
+    public Room GetRoom(Vector3 pos)
+    {
+        foreach(Room room in rooms)
         {
-            Collider collider = room.GetComponent<BoxCollider>();
-            if (collider.bounds.Contains(pos))
+            if (room.Collider.bounds.Contains(pos))
             {
-                return room.GetComponent<Room>().GetRoom();
+                return room;
             }
         }
 
-        return RoomType.None;
+        return null;
     }
 }

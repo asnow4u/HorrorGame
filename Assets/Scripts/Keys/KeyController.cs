@@ -4,18 +4,13 @@ using UnityEngine;
 
 public class KeyController : MonoBehaviour
 {
-
     public static KeyController instance;
 
     [SerializeField] private GameObject goldKeyPrefab;
     [SerializeField] private GameObject silverKeyPrefab;
-    [SerializeField] private Transform locationParent;
-    
-    private List<Transform> keyLocations = new List<Transform>();
 
-    //TODO: make private
-    public int goldKeyStartCount; //Harder to find keys
-    public int silverKeyStartCount; //Easier to find keys
+    public int goldKeyStartCount; 
+    public int silverKeyStartCount;
 
     public int goldKeyHeldCount;
     public int silverKeyHeldCount;
@@ -38,14 +33,11 @@ public class KeyController : MonoBehaviour
 
     void Start()
     {
-        foreach (Transform child in locationParent)
-        {
-            keyLocations.Add(child);
-        }
-
         SpawnKeys();
     }
 
+
+    #region Getter / Setter
 
     public int HeldSilverKeys
     {
@@ -72,7 +64,6 @@ public class KeyController : MonoBehaviour
         set { goldKeyUsedCount = value; }
     }
 
-
     public bool KeysFound()
     {
         if (goldKeyUsedCount == goldKeyStartCount && silverKeyUsedCount == silverKeyStartCount)
@@ -85,8 +76,16 @@ public class KeyController : MonoBehaviour
         }
     }
 
+    #endregion
+
     public void SpawnKeys()
     {
+        List<Transform> keyLocations = new List<Transform>();
+        foreach (Room room in RoomController.instance.Rooms)
+        {
+            keyLocations.AddRange(room.Keys);
+        }
+
         for (int i=0; i<goldKeyStartCount; i++)
         {
             int rand = Random.Range(0, keyLocations.Count);
