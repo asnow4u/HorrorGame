@@ -88,7 +88,7 @@ public class Room : MonoBehaviour
 
     public List<Transform> WanderSpots
     {
-        get { return WanderSpots; }
+        get { return wanderSpots; }
     }
 
     #endregion

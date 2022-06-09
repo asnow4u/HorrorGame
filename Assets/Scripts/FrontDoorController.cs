@@ -40,26 +40,26 @@ public class FrontDoorController : MonoBehaviour
                     }
                 }
 
-                else if (KeyController.instance.silverKeyHeldCount > 0)
+                else if (KeyController.instance.HeldSilverKeys > 0)
                 {
                     Debug.Log("Press E to Insert key");
 
                     if (Input.GetKey(KeyCode.E))
                     {
-                        KeyController.instance.silverKeyHeldCount--;
-                        KeyController.instance.silverKeyUsedCount++;
+                        KeyController.instance.HeldSilverKeys--;
+                        KeyController.instance.UsedSilverKeys++;
                         delayTime = Time.time + animationDelay;
                     }
                 }
 
-                else if (KeyController.instance.goldKeyHeldCount > 0)
+                else if (KeyController.instance.HeldGoldKeys > 0)
                 {
                     Debug.Log("Press E to Insert key");
                 
                     if (Input.GetKey(KeyCode.E))
                     {
-                        KeyController.instance.goldKeyHeldCount--;
-                        KeyController.instance.goldKeyUsedCount++;
+                        KeyController.instance.HeldGoldKeys--;
+                        KeyController.instance.UsedGoldKeys++;
                         delayTime = Time.time + animationDelay;
                     }
                 }

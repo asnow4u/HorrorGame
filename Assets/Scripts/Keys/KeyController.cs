@@ -9,14 +9,14 @@ public class KeyController : MonoBehaviour
     [SerializeField] private GameObject goldKeyPrefab;
     [SerializeField] private GameObject silverKeyPrefab;
 
-    public int goldKeyStartCount; 
-    public int silverKeyStartCount;
+    [SerializeField] int goldKeyStartCount; 
+    [SerializeField] int silverKeyStartCount;
 
-    public int goldKeyHeldCount;
-    public int silverKeyHeldCount;
+    [SerializeField] int goldKeyHeldCount;
+    [SerializeField] int silverKeyHeldCount;
 
-    public int goldKeyUsedCount;
-    public int silverKeyUsedCount;
+    [SerializeField] int goldKeyUsedCount;
+    [SerializeField] int silverKeyUsedCount;
 
     private void Awake()
     {
@@ -39,11 +39,24 @@ public class KeyController : MonoBehaviour
 
     #region Getter / Setter
 
+    public int StartGoldKeys
+    {
+        get { return goldKeyStartCount; }
+    }
+
+
+    public int StartSilverKeys
+    {
+        get { return silverKeyStartCount; }
+    }
+
+
     public int HeldSilverKeys
     {
         get { return silverKeyHeldCount; }
         set { silverKeyHeldCount = value; }
     }
+
 
     public int HeldGoldKeys
     {

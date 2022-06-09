@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SkeletonBehavior : MonoBehaviour
 {
@@ -58,13 +59,8 @@ public class SkeletonBehavior : MonoBehaviour
     public static SkeletonBehavior instance;
 
     [SerializeField] private GameObject skeleton;
-    [SerializeField] private Transform dormatObj;
-    [SerializeField] private Transform observeObj;
 
     [SerializeField] private float dormantTimer;
-    
-    private List<Transform> dormatLocations = new List<Transform>();
-    private List<Transform> observeLocations = new List<Transform>();
 
     public enum State {dormant, observe, wander, hunt, chase};
     public State state;
@@ -83,11 +79,6 @@ public class SkeletonBehavior : MonoBehaviour
             Destroy(this);
         }
 
-        foreach (Transform location in dormatObj)
-        {
-            dormatLocations.Add(location);
-        }
-
 
         state = State.dormant;
 
@@ -97,6 +88,7 @@ public class SkeletonBehavior : MonoBehaviour
 
     private void Update()
     {
+        ProgressCheck();
 
         switch(state)
         {
@@ -122,6 +114,42 @@ public class SkeletonBehavior : MonoBehaviour
         }
     }
 
+
+    private void ProgressCheck()
+    {
+        //% of gathered key and or time based
+        int totalKeys = KeyController.instance.HeldGoldKeys;
+        totalKeys += KeyController.instance.HeldSilverKeys;
+        totalKeys += KeyController.instance.UsedGoldKeys;
+        totalKeys += KeyController.instance.UsedSilverKeys;
+
+        float keyPercent = (float)totalKeys / (float)(KeyController.instance.StartGoldKeys + KeyController.instance.StartSilverKeys);
+      
+        //dormant to observe 20%
+        if (state == State.dormant)
+        {
+            if (keyPercent > .2f)
+            {
+                state = State.observe;
+            }
+        }
+
+        //observe to wander 40%
+        else if (state == State.observe)
+        {
+            if (keyPercent > .4f)
+            {
+                state = State.wander;
+                skeleton.GetComponent<SkeletonMovement>().enabled = true;
+                skeleton.GetComponent<NavMeshAgent>().enabled = true;
+            }
+        }
+
+
+        //TODO: Occational hunts
+
+
+    }
 
     private void UpdateDormant()
     {
@@ -172,6 +200,36 @@ public class SkeletonBehavior : MonoBehaviour
         //Once destination is reached set new destination
         //Go to curtain spots, look around, occationally look at a hiding spot
         //! during this stage if check a hiding spot, should not check one the player is in
+        //Need to keep track of previous places hes been to, to prevent jumping between the same rooms (1 or 2 should work fine)
+        //Need to be able to go to locations that are not in a room (balcony)
+
+        if (skeleton.GetComponent<SkeletonMovement>().Arrived)
+        {
+            //TODO: start coroutine time and do something
+            //Different actions like looking under the bed, ect.
+
+
+
+
+
+            List<Transform> availbleSpots = new List<Transform>();
+
+            foreach (Room room in RoomController.instance.Rooms)
+            {
+                if (RoomController.instance.SkeletonRoom != null && room.Type == RoomController.instance.SkeletonRoom.Type) continue;
+
+                foreach (Transform transform in room.WanderSpots)
+                {
+                    availbleSpots.Add(transform);
+                }
+            }
+
+            int rand = Random.Range(0, availbleSpots.Count);
+
+            skeleton.GetComponent<SkeletonMovement>().SetTarget(availbleSpots[rand].position);
+            //TODO: Rotation
+
+        }
     }
 
 

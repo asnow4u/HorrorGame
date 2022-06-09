@@ -9,16 +9,8 @@ using UnityEngine.AI;
 
 public class SkeletonMovement : MonoBehaviour
 {
-
-    /* Requirement
-     * 
-     * Based on the behaviour, either teleport the skeleton around or move with weighted movement.
-     * Weighted movement is random movement that will be steered towards the remaining keys and player
-     */
-
-    [SerializeField] private Transform targetPos;
-
     private NavMeshAgent navAgent;
+    private bool arrived;
 
     // Start is called before the first frame update
     void Awake()
@@ -29,6 +21,33 @@ public class SkeletonMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        navAgent.destination = targetPos.position;
+        if (arrived == false)
+        {
+            if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+            {
+                arrived = true;
+                //TODO: Activate a coroutine in skeleton behavior
+            }
+        }
     }
+
+
+    #region
+
+    public bool Arrived
+    {
+        get { return arrived; }
+    }
+
+
+    public void SetTarget(Vector3 target)
+    {
+        if (arrived == false) return;
+
+        navAgent.destination = target;
+        arrived = false;
+    }
+
+    #endregion
+
 }
