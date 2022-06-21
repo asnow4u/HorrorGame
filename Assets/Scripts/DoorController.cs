@@ -39,12 +39,12 @@ public class DoorController : MonoBehaviour
         if (forceOpen)
         {
             forceOpen = false;
-            ForceOpen(force);
+            Force(force);
         }
     }
 
 
-    public void ForceOpen(float openForce)
+    public void Force(float openForce)
     {
         JointSpring spring = new JointSpring();
 

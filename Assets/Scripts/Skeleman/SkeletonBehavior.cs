@@ -60,12 +60,23 @@ public class SkeletonBehavior : MonoBehaviour
 
     [SerializeField] private GameObject skeleton;
 
+    [SerializeField] private int previousRoomCap;
+
     [SerializeField] private float dormantTimer;
+    [SerializeField] private float wanderIdleRoomTimer;
 
     public enum State {dormant, observe, wander, hunt, chase};
     public State state;
 
     private bool timerFinished;
+
+    private float keyPercent;
+
+    private List<Room> previousRooms;
+
+    private bool arrived;
+    private bool searchingRoom;
+    private bool searchingSpot;
 
     private void Awake()
     {
@@ -85,6 +96,10 @@ public class SkeletonBehavior : MonoBehaviour
         StartCoroutine(Wait(dormantTimer));
     }
 
+    private void Start()
+    {
+        previousRooms = new List<Room>();    
+    }
 
     private void Update()
     {
@@ -123,7 +138,7 @@ public class SkeletonBehavior : MonoBehaviour
         totalKeys += KeyController.instance.UsedGoldKeys;
         totalKeys += KeyController.instance.UsedSilverKeys;
 
-        float keyPercent = (float)totalKeys / (float)(KeyController.instance.StartGoldKeys + KeyController.instance.StartSilverKeys);
+        keyPercent = (float)totalKeys / (float)(KeyController.instance.StartGoldKeys + KeyController.instance.StartSilverKeys);
       
         //dormant to observe 20%
         if (state == State.dormant)
@@ -142,6 +157,9 @@ public class SkeletonBehavior : MonoBehaviour
                 state = State.wander;
                 skeleton.GetComponent<SkeletonMovement>().enabled = true;
                 skeleton.GetComponent<NavMeshAgent>().enabled = true;
+
+                arrived = true;
+                searchingRoom = false;
             }
         }
 
@@ -159,6 +177,7 @@ public class SkeletonBehavior : MonoBehaviour
         Room playerRoom = RoomController.instance.PlayerRoom;
         Room skeletonRoom = RoomController.instance.SkeletonRoom;
 
+        //Prevent movement
         if (playerRoom == null) return;
         if (skeletonRoom != null && playerRoom.Type == skeletonRoom.Type) return;
 
@@ -166,13 +185,16 @@ public class SkeletonBehavior : MonoBehaviour
 
         foreach (Room room in RoomController.instance.Rooms)
         {
+            //Spot not available
             if (skeletonRoom != null && room.Type == skeletonRoom.Type) continue;
             if (room.Type == playerRoom.Type) continue;
 
             foreach (Transform transform in room.DormantSpots)
             {
+                //Spot not in view of player
                 if (!PlayerController.instance.InViewOfCamera(transform.position))
                 {
+                    //Add available spot
                     availbleSpots.Add(transform);
                 }
             }
@@ -197,38 +219,84 @@ public class SkeletonBehavior : MonoBehaviour
     private void UpdateWander()
     {
         //TODO: travel to destination
-        //Once destination is reached set new destination
         //Go to curtain spots, look around, occationally look at a hiding spot
         //! during this stage if check a hiding spot, should not check one the player is in
-        //Need to keep track of previous places hes been to, to prevent jumping between the same rooms (1 or 2 should work fine)
-        //Need to be able to go to locations that are not in a room (balcony)
-
-        if (skeleton.GetComponent<SkeletonMovement>().Arrived)
+        if (!arrived)
         {
-            //TODO: start coroutine time and do something
-            //Different actions like looking under the bed, ect.
-
-
-
-
-
-            List<Transform> availbleSpots = new List<Transform>();
-
-            foreach (Room room in RoomController.instance.Rooms)
+            if (skeleton.GetComponent<SkeletonMovement>().Arrived)
             {
-                if (RoomController.instance.SkeletonRoom != null && room.Type == RoomController.instance.SkeletonRoom.Type) continue;
+                arrived = true;
 
-                foreach (Transform transform in room.WanderSpots)
+                //Randomize if searching room
+                int rand = (int)Random.Range(0f, 100f);
+                if (keyPercent * 100f > rand)
                 {
-                    availbleSpots.Add(transform);
+                    searchingRoom = true;
+                }
+                else
+                {
+                    //Idle state
+                    searchingRoom = false;
+                    StartCoroutine(Wait(wanderIdleRoomTimer));
                 }
             }
+        }
 
-            int rand = Random.Range(0, availbleSpots.Count);
+        else
+        {
+            if (searchingRoom)
+            {
+                if (!searchingSpot)
+                {
+                    SearchHidingSpot();
+                }
 
-            skeleton.GetComponent<SkeletonMovement>().SetTarget(availbleSpots[rand].position);
-            //TODO: Rotation
+                //TODO: trigger collision would happen when the skeleton gets close enough to the target hiding spot AND seachingspot is true. 
+                // Needs to cancel there navigation target, play animation looking.
+                // if player then they lose
+                else
+                {
+                    searchingSpot = false;
+                    searchingRoom = false;
+                }
+                //Remove this above part once the trigger is set
+            }
 
+            else
+            {
+                if (timerFinished)
+                {
+                    List<Transform> availbleSpots = new List<Transform>();
+
+                    foreach (Room room in RoomController.instance.Rooms)
+                    {
+                        //Spot not available
+                        if (RoomController.instance.SkeletonRoom != null && room.Type == RoomController.instance.SkeletonRoom.Type) continue;
+                        if (previousRooms.Contains(room)) continue;
+
+                        foreach (Transform transform in room.WanderSpots)
+                        {
+                            //Add available spot
+                            availbleSpots.Add(transform);
+                        }
+                    }
+
+                    int rand = Random.Range(0, availbleSpots.Count);
+
+                    //Previous room
+                    previousRooms.Add(RoomController.instance.GetRoom(availbleSpots[rand].position));
+                    if (previousRooms.Count > previousRoomCap)
+                    {
+                        previousRooms.RemoveAt(0);
+                    }
+
+                    //Set target
+                    skeleton.GetComponent<SkeletonMovement>().SetTarget(availbleSpots[rand].position);
+                    arrived = false;
+                    //TODO: Rotation
+
+                }
+            }
         }
     }
 
@@ -244,6 +312,41 @@ public class SkeletonBehavior : MonoBehaviour
 
     }
 
+
+
+    private void SearchHidingSpot()
+    {
+        List<GameObject> hidingSpots =  new List<GameObject>(RoomController.instance.SkeletonRoom.HidingSpots);
+        
+        //No hiding spots, wait idle
+        if (hidingSpots.Count == 0)
+        {
+            searchingRoom = false;
+            StartCoroutine(Wait(wanderIdleRoomTimer));
+            return;
+        }
+
+        if (hidingSpots.Count == 1)
+        {
+            //Check the hiding spot
+            skeleton.GetComponent<SkeletonMovement>().SetTarget(hidingSpots[0].transform.position);
+            searchingSpot = true;
+            return;
+        }
+
+        List<GameObject> availbleSpots = new List<GameObject>();
+        foreach (GameObject hidingSpot in hidingSpots)
+        {
+            //Check if player is hiding
+            //if (!hidingSpot.PlayerHiding)
+            availbleSpots.Add(hidingSpot);
+        }
+
+        int rand = Random.Range(0, availbleSpots.Count);
+        //Check the hiding spot
+        skeleton.GetComponent<SkeletonMovement>().SetTarget(availbleSpots[rand].transform.position);
+        searchingSpot = true;
+    }
 
 
     private IEnumerator Wait(float time)

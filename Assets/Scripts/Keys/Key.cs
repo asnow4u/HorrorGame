@@ -14,11 +14,11 @@ public class Key : MonoBehaviour
 
             if (GetComponent<Renderer>().isVisible)
             {
-                Debug.Log("Press E to Pick up");
+                UIController.instance.ToggleKeyPanel(true);
 
                 if (Input.GetKey(KeyCode.E))
                 {
-                    Debug.Log("Key Grabbed");
+                    UIController.instance.ToggleKeyPanel(false);
 
                     if (isGold)
                     {
@@ -32,6 +32,15 @@ public class Key : MonoBehaviour
                     Destroy(gameObject);
                 }
             }
+        }
+    }
+
+
+    public void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            UIController.instance.ToggleKeyPanel(false);
         }
     }
 }

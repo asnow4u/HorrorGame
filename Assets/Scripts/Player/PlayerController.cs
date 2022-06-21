@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
-    [SerializeField] private Transform player;
-
     public static PlayerController instance;
 
     private Camera mainCamera;
 
-
+    public float walkSpeed;
+    public float runSpeed;
+    private bool allowMovement;
 
     // Start is called before the first frame update
     void Awake()
@@ -24,8 +23,13 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(this);
         }
+    }
 
-        mainCamera = player.GetComponentInChildren<Camera>();
+    private void Start()
+    {
+        mainCamera = GetComponentInChildren<Camera>();
+
+        allowMovement = true;
     }
 
 
@@ -37,7 +41,12 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    #endregion
+    public void ToggleMovement(bool allowed)
+    {
+        allowMovement = allowed;
+        GetComponent<Rigidbody>().useGravity = allowed;
+        GetComponent<Collider>().enabled = allowed;
+    }
 
 
     public bool InViewOfCamera(Vector3 pos)
@@ -49,6 +58,31 @@ public class PlayerController : MonoBehaviour
         }
 
         return false;
+    }
+
+    #endregion
+
+
+    private void Update()
+    {
+        if (!allowMovement) return;
+
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+
+        Vector3 dir = transform.right * x + transform.forward * z;
+
+
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            transform.Translate(dir * runSpeed * Time.deltaTime, Space.World);
+        }
+
+        else
+        {
+            transform.Translate(dir * walkSpeed * Time.deltaTime, Space.World);
+        }
+
     }
 
 }

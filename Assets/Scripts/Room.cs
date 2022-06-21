@@ -24,6 +24,7 @@ public class Room : MonoBehaviour
         controller = GetComponentInParent<RoomController>();
 
         keySpots = new List<Transform>();
+        hidingSpots = new List<GameObject>();
         dormantSpots = new List<Transform>();
         observeSpots = new List<Transform>();
         wanderSpots = new List<Transform>();
