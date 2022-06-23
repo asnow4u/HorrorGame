@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WardrobeHidingSpot : MonoBehaviour
+public class BedHidingSpot : MonoBehaviour
 {
     [SerializeField] private List<Transform> hideKeyFrames;
     [SerializeField] private List<float> hideDurations;
@@ -17,7 +17,6 @@ public class WardrobeHidingSpot : MonoBehaviour
     private bool hideAnimationPlaying;
     private bool leaveAnimationPlaying;
 
-    private bool isOpen;
     private bool isPlayerHiding;
     private bool delayTimer;
 
@@ -30,71 +29,19 @@ public class WardrobeHidingSpot : MonoBehaviour
 
     private void Update()
     {
-        if (hideAnimationPlaying)
-        {
-            if (frameController.PercentageFinished > 0.8f)
-            {
-                //Close Doors
-                foreach (DoorController door in parent.GetComponents<DoorController>())
-                {
-                    door.Force(15f);
-                }
 
-                //Update Bool
-                hideAnimationPlaying = false;
-                isOpen = false;
-            }
+        if (leaveAnimationPlaying && !delayTimer)
+        {
+            //Update Bool
+            leaveAnimationPlaying = false;
+
+            //Toggle Movement
+            PlayerController.instance.ToggleMovement(true);
         }
 
 
-        else if (leaveAnimationPlaying)
-        {
-            if (frameController.PercentageFinished == 1f)
-            {
-                //Close Doors
-                foreach (DoorController door in parent.GetComponents<DoorController>())
-                {
-                    door.Force(15f);
-                }
-
-                //Toggle Movement
-                PlayerController.instance.ToggleMovement(true);
-
-                //Update Bool
-                leaveAnimationPlaying = false;
-                isOpen = false;
-            }
-        }
-
-
-        //(1) Open Action
-        else if (playerCollision && !isOpen && !isPlayerHiding && !delayTimer)
-        {
-            //Panel On
-            UIController.instance.ToggleOpenPanel(true);
-
-            if (Input.GetKey(KeyCode.E))
-            {
-                //Panel Off
-                UIController.instance.ToggleOpenPanel(false);
-
-                //Open Doors
-                foreach (DoorController door in parent.GetComponents<DoorController>())
-                {
-                    door.Force(-15f);
-                }
-
-                //Bool Update
-                isOpen = true;
-                
-                //Delay
-                StartCoroutine(Delay(0.7f));
-            }
-        }
-
-
-        //(2) Hide Action
-        else if (playerCollision && isOpen && !isPlayerHiding && !delayTimer)
+        //(1) Hide Action
+        if (playerCollision && !isPlayerHiding && !delayTimer)
         {
             //Panel On
             UIController.instance.ToggleHidePanel(true);
@@ -109,7 +56,6 @@ public class WardrobeHidingSpot : MonoBehaviour
                 StartCoroutine(frameController.KeyFrameMovement(PlayerController.instance.transform, hideKeyFrames, hideDurations));
 
                 //Bool Update
-                hideAnimationPlaying = true;
                 isPlayerHiding = true;
 
                 //Delay
@@ -123,8 +69,8 @@ public class WardrobeHidingSpot : MonoBehaviour
         }
 
 
-        //(3) Leave
-        else if (!isOpen && isPlayerHiding && !delayTimer)
+        //(2) Leave
+        else if (isPlayerHiding && !delayTimer)
         {
             //Panel On
             UIController.instance.ToggleLeavePanel(true);
@@ -144,9 +90,8 @@ public class WardrobeHidingSpot : MonoBehaviour
                 StartCoroutine(frameController.KeyFrameMovement(PlayerController.instance.transform, leaveKeyFrames, leaveDurations));
 
                 //Update Bool
-                leaveAnimationPlaying = true;
-                isOpen = true;
                 isPlayerHiding = false;
+                leaveAnimationPlaying = true;
 
                 //Delay
                 float totalTime = 0;
@@ -183,15 +128,8 @@ public class WardrobeHidingSpot : MonoBehaviour
     {
         playerCollision = false;
         UIController.instance.ClearPanel();
-
-        if (isOpen)
-        {
-            isOpen = false;
-            foreach (DoorController door in parent.GetComponents<DoorController>())
-            {
-                door.Force(15f);
-            }
-        }
+    
+        //TODO: Close door if open?
     }
 
 }
