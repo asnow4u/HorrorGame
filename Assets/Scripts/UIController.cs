@@ -10,6 +10,8 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject openPanel;
     [SerializeField] private GameObject hidePanel;
     [SerializeField] private GameObject leavePanel;
+    [SerializeField] private GameObject turnOnPanel;
+    [SerializeField] private GameObject turnOffPanel;
 
     private void Awake()
     {
@@ -42,6 +44,16 @@ public class UIController : MonoBehaviour
         leavePanel.SetActive(active);
     }
 
+    public void ToggleTurnOnPanel(bool active)
+    {
+        turnOnPanel.SetActive(active);
+    }
+
+    public void ToggleTurnOffPanel(bool active)
+    {
+        turnOffPanel.SetActive(active);
+    }
+
 
 
     public void ClearPanel()
@@ -50,5 +62,7 @@ public class UIController : MonoBehaviour
         ToggleOpenPanel(false);
         ToggleHidePanel(false);
         ToggleLeavePanel(false);
+        ToggleTurnOnPanel(false);
+        ToggleTurnOffPanel(false);
     }
 }
