@@ -2,8 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyFrameController : MonoBehaviour
+public class HidingSpot : MonoBehaviour
 {
+    [SerializeField] protected List<Transform> hideKeyFrames;
+    [SerializeField] protected List<float> hideDurations;
+    [SerializeField] protected List<Transform> leaveKeyFrames;
+    [SerializeField] protected List<float> leaveDurations;
+    [SerializeField] protected Transform skeletonSearchSpot;
+
+    protected bool isPlayerHiding;
+    private KeyFrameData data;
+
+
+    public Transform GetSkeletonSearchSpot()
+    {
+        return skeletonSearchSpot;
+    }
+
 
     private class KeyFrameData
     {
@@ -21,17 +36,20 @@ public class KeyFrameController : MonoBehaviour
         }
     }
 
-    private KeyFrameData data;
 
 
-    public float PercentageFinished
+    protected float PercentageFinished
     {
         get { return data.curDuration / data.totalDuration; }
     }
 
 
+    public bool IsPlayerHiding
+    {
+        get { return isPlayerHiding; }
+    }
 
-    public IEnumerator KeyFrameMovement(Transform target, List<Transform> frames, List<float> durations)
+    protected IEnumerator KeyFrameMovement(Transform target, List<Transform> frames, List<float> durations)
     {
         float timeElapsed;
         Vector3 startPos;
@@ -46,7 +64,7 @@ public class KeyFrameController : MonoBehaviour
         data = new KeyFrameData(totalTime, frames.Count);
 
         //KeyFrames
-        for (int i=0; i<frames.Count; i++)
+        for (int i = 0; i < frames.Count; i++)
         {
             timeElapsed = 0;
             startPos = target.position;
@@ -66,21 +84,6 @@ public class KeyFrameController : MonoBehaviour
 
             data.curDuration += durations[i];
             data.curFrame = i;
-        }
-    }
-
-
-    //Debug
-    public List<Transform> testTarget = new List<Transform>();
-    public List<float> testDuration = new List<float>();
-    public bool testRun;
-
-    private void Update()
-    {
-        if (testRun)
-        {
-            testRun = false;
-            StartCoroutine(KeyFrameMovement(transform, testTarget, testDuration));
         }
     }
 }

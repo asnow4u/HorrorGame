@@ -2,29 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BedHidingSpot : MonoBehaviour
+public class BedHidingSpot : HidingSpot
 {
-    [SerializeField] private List<Transform> hideKeyFrames;
-    [SerializeField] private List<float> hideDurations;
-    [SerializeField] private List<Transform> leaveKeyFrames;
-    [SerializeField] private List<float> leaveDurations;
-
-    private Transform parent;
-    private KeyFrameController frameController;
-    private DoorController doorController;
-
     private bool playerCollision;
-    private bool hideAnimationPlaying;
     private bool leaveAnimationPlaying;
 
-    private bool isPlayerHiding;
     private bool delayTimer;
 
     // Start is called before the first frame update
     void Start()
     {
-        parent = transform.parent;
-        frameController = GetComponent<KeyFrameController>();
+
     }
 
     private void Update()
@@ -53,7 +41,7 @@ public class BedHidingSpot : MonoBehaviour
                 
                 //Keyframe Animation
                 PlayerController.instance.ToggleMovement(false);
-                StartCoroutine(frameController.KeyFrameMovement(PlayerController.instance.transform, hideKeyFrames, hideDurations));
+                StartCoroutine(KeyFrameMovement(PlayerController.instance.transform, hideKeyFrames, hideDurations));
 
                 //Bool Update
                 isPlayerHiding = true;
@@ -80,14 +68,8 @@ public class BedHidingSpot : MonoBehaviour
                 //Panel Off
                 UIController.instance.ToggleLeavePanel(false);
 
-                //Open Doors
-                foreach (DoorController door in parent.GetComponents<DoorController>())
-                {
-                    door.Force(-15f);
-                }
-
                 //Keyframe Animation
-                StartCoroutine(frameController.KeyFrameMovement(PlayerController.instance.transform, leaveKeyFrames, leaveDurations));
+                StartCoroutine(KeyFrameMovement(PlayerController.instance.transform, leaveKeyFrames, leaveDurations));
 
                 //Update Bool
                 isPlayerHiding = false;
@@ -128,8 +110,6 @@ public class BedHidingSpot : MonoBehaviour
     {
         playerCollision = false;
         UIController.instance.ClearPanel();
-    
-        //TODO: Close door if open?
     }
 
 }

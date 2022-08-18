@@ -2,37 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WardrobeHidingSpot : MonoBehaviour
+public class WardrobeHidingSpot : HidingSpot
 {
-    [SerializeField] private List<Transform> hideKeyFrames;
-    [SerializeField] private List<float> hideDurations;
-    [SerializeField] private List<Transform> leaveKeyFrames;
-    [SerializeField] private List<float> leaveDurations;
-
     private Transform parent;
-    private KeyFrameController frameController;
-    private DoorController doorController;
 
     private bool playerCollision;
     private bool hideAnimationPlaying;
     private bool leaveAnimationPlaying;
 
     private bool isOpen;
-    private bool isPlayerHiding;
     private bool delayTimer;
 
     // Start is called before the first frame update
     void Start()
     {
         parent = transform.parent;
-        frameController = GetComponent<KeyFrameController>();
     }
 
     private void Update()
     {
         if (hideAnimationPlaying)
         {
-            if (frameController.PercentageFinished > 0.8f)
+            if (PercentageFinished > 0.8f)
             {
                 //Close Doors
                 foreach (DoorController door in parent.GetComponents<DoorController>())
@@ -49,7 +40,7 @@ public class WardrobeHidingSpot : MonoBehaviour
 
         else if (leaveAnimationPlaying)
         {
-            if (frameController.PercentageFinished == 1f)
+            if (PercentageFinished == 1f)
             {
                 //Close Doors
                 foreach (DoorController door in parent.GetComponents<DoorController>())
@@ -106,7 +97,7 @@ public class WardrobeHidingSpot : MonoBehaviour
                 
                 //Keyframe Animation
                 PlayerController.instance.ToggleMovement(false);
-                StartCoroutine(frameController.KeyFrameMovement(PlayerController.instance.transform, hideKeyFrames, hideDurations));
+                StartCoroutine(KeyFrameMovement(PlayerController.instance.transform, hideKeyFrames, hideDurations));
 
                 //Bool Update
                 hideAnimationPlaying = true;
@@ -141,7 +132,7 @@ public class WardrobeHidingSpot : MonoBehaviour
                 }
 
                 //Keyframe Animation
-                StartCoroutine(frameController.KeyFrameMovement(PlayerController.instance.transform, leaveKeyFrames, leaveDurations));
+                StartCoroutine(KeyFrameMovement(PlayerController.instance.transform, leaveKeyFrames, leaveDurations));
 
                 //Update Bool
                 leaveAnimationPlaying = true;
@@ -181,16 +172,25 @@ public class WardrobeHidingSpot : MonoBehaviour
 
     private void OnTriggerExit(Collider col)
     {
-        playerCollision = false;
-        UIController.instance.ClearPanel();
 
-        if (isOpen)
+        if (col.gameObject.tag == "Player")
         {
-            isOpen = false;
-            foreach (DoorController door in parent.GetComponents<DoorController>())
+            playerCollision = false;
+            UIController.instance.ClearPanel();
+
+            if (isOpen)
             {
-                door.Force(15f);
+                isOpen = false;
+                foreach (DoorController door in parent.GetComponents<DoorController>())
+                {
+                    door.Force(15f);
+                }
             }
+        }
+
+        if (col.gameObject.tag == "Skeleman")
+        {
+            SkeletonBehavior.instance.PlayerFoundHiding = isPlayerHiding;
         }
     }
 

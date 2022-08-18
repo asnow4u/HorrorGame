@@ -6,49 +6,65 @@ public class Room : MonoBehaviour
 {
     [SerializeField] private RoomController.RoomType type;
     [SerializeField] private List<Light> lights;
-    [SerializeField] private List<GameObject> hidingSpots;
     [SerializeField] private Transform key;
+    [SerializeField] private Transform hiding;
     [SerializeField] private Transform dormant;
     [SerializeField] private Transform observe;
     [SerializeField] private Transform wander;
 
     private List<Transform> keySpots;
+    private List<HidingSpot> hidingSpots;
     private List<Transform> dormantSpots;
     private List<Transform> observeSpots;
     private List<Transform> wanderSpots;
 
-    private RoomController controller;
+    RoomController controller;
 
     private void Awake()
     {
-        controller = GetComponentInParent<RoomController>();
 
         keySpots = new List<Transform>();
-        hidingSpots = new List<GameObject>();
+        hidingSpots = new List<HidingSpot>();
         dormantSpots = new List<Transform>();
         observeSpots = new List<Transform>();
         wanderSpots = new List<Transform>();
 
-        foreach (Transform transform in key)
+        foreach (Transform child in key)
         {
-            keySpots.Add(transform);
+            keySpots.Add(child);
+        }
+        
+        foreach (Transform child in hiding)
+        {
+            HidingSpot hidingSpot;            
+            if (child.TryGetComponent<HidingSpot>(out hidingSpot))
+            {
+                hidingSpots.Add(hidingSpot);
+            }
         }
 
-        foreach (Transform transform in dormant)
+        foreach (Transform child in dormant)
         {
-            dormantSpots.Add(transform);
+            dormantSpots.Add(child);
         }
 
-        foreach (Transform transform in observe)
+        foreach (Transform child in observe)
         {
-            observeSpots.Add(transform);
+            observeSpots.Add(child);
         }
 
-        foreach (Transform transform in wander)
+        foreach (Transform child in wander)
         {
-            wanderSpots.Add(transform);
+            wanderSpots.Add(child);
         }
     }
+
+    private void Start()
+    {
+        controller = RoomController.instance;
+        controller.Rooms.Add(this);
+    }
+
 
     #region Getter / Setter
 
@@ -67,7 +83,7 @@ public class Room : MonoBehaviour
         get { return GetComponent<BoxCollider>(); }
     }
 
-    public List<GameObject> HidingSpots
+    public List<HidingSpot> HidingSpots
     {
         get { return hidingSpots; }
     }

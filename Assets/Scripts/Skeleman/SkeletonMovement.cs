@@ -48,6 +48,11 @@ public class SkeletonMovement : MonoBehaviour
         arrived = false;
     }
 
+    public void Stop()
+    {
+        navAgent.isStopped = true;
+    }
+
     #endregion
 
 }
