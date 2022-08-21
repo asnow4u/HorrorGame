@@ -15,7 +15,7 @@ public partial class SkeletonBehavior : MonoBehaviour
      * Timer (Will decrease the time needed based on how well the player is doing
      * Move speed (will increase based on on how well the player is doing)   
     */
-    private enum WanderState {Wander, InRoomSearch, HidingSpotSearch, FinishSearch};
+    private enum WanderState {startWander, wander, inRoomSearch, hidingSpotSearch};
     [SerializeField] private WanderState wanderState;
     [SerializeField] private int previousRoomCap;
 
@@ -33,58 +33,80 @@ public partial class SkeletonBehavior : MonoBehaviour
 
     private void UpdateWander()
     {
-        //Determine if arrived at location
-        //based on state do stuff
 
-        if (skeleton.GetComponent<SkeletonMovement>().Arrived)
+        switch (wanderState)
         {
-            if (wanderState == WanderState.Wander)
-            {
-                //Randomize if searching room
-                int rand = (int)Random.Range(0f, 100f); //TODO: For hunts there should be a higher chance to search the room
-                if (keyPercent * 100f > rand)
-                {
-
-                    //Change State
-                    wanderState = WanderState.InRoomSearch;
-
-                    //Determine hiding spots
-                    SelectHidingSpot();
-                }
-
-                //Small pause before search
-                StartCoroutine(Wait(wanderIdleRoomTimer));
-            }
-
-
-            if (wanderState == WanderState.HidingSpotSearch)
-            {
+            //Set destination to wander to after idle time finishes
+            case WanderState.startWander:
                 
-                //TODO: Might need to make a hiding spot class that has this 
-                if (playerFoundHiding)
+                if (timerFinished) SetNextRoom();
+                break;
+
+
+            //Actions upon Arival of destination, determine if searching the room
+            case WanderState.wander:
+
+                if (skeleton.GetComponent<SkeletonMovement>().Arrived)
                 {
-                    //TODO: if player then they lose
-                    Debug.Log("YOU Were caught");
+                    int rand = (int)Random.Range(0f, 100f); //TODO: For hunts there should be a higher chance to search the room
+                    
+                    //Searching Hiding Spot
+                    if (keyPercent * 100f > rand)
+                    {
+
+                        //Change State
+                        wanderState = WanderState.inRoomSearch;
+
+                        //Determine hiding spots
+                        SelectHidingSpot();
+                    }
+
+                    //Not Searching Hiding Spot
+                    else
+                    {
+                        wanderState = WanderState.startWander;
+                    }
+
+                    //Small pause before search
+                    StartCoroutine(Wait(wanderIdleRoomTimer));
                 }
-
-                wanderState = WanderState.FinishSearch;
-                StartCoroutine(Wait(searchHidingSpotTimer));
-            }
-        }
+                break;
 
 
-        else if (timerFinished)
-        {
-            if (wanderState == WanderState.InRoomSearch)
-            {
-                skeleton.GetComponent<SkeletonMovement>().SetTarget(selectedHidingSpot.position); //TODO: Get a position for the skeleton to move to
-                wanderState = WanderState.HidingSpotSearch;
-            }
+            //Actions taking place when searching a room
+            case WanderState.inRoomSearch:
+                    
+                if (timerFinished)
+                {
+                    skeleton.GetComponent<SkeletonMovement>().SetTarget(selectedHidingSpot.position);
+                    //wanderState = WanderState.HidingSpotSearch;
 
-            if (wanderState == WanderState.FinishSearch)
-            {
-                LeaveToNextRoom();
-            }
+                    if (skeleton.GetComponent<SkeletonMovement>().Arrived)
+                    {
+
+                        //TODO: We may need an addition state reprecenting the searching that happens
+
+                        if (playerFoundHiding)
+                        {
+                            //TODO: if player then they lose
+                            Debug.Log("You Were caught");
+                        }
+
+                        wanderState = WanderState.hidingSpotSearch;
+                        StartCoroutine(Wait(searchHidingSpotTimer));
+                    }
+                }    
+                
+                break;
+
+
+            case WanderState.hidingSpotSearch:
+
+                if (timerFinished)
+                {
+                    wanderState = WanderState.startWander;
+                }
+                break;
         }
     }
 
@@ -131,7 +153,7 @@ public partial class SkeletonBehavior : MonoBehaviour
     }
 
 
-    public void LeaveToNextRoom() //TODO: Use this for hunts as well
+    public void SetNextRoom() //TODO: Use this for hunts as well
     {
         //Randomize Room
         List<Room> availableRooms = new List<Room>();
@@ -167,6 +189,6 @@ public partial class SkeletonBehavior : MonoBehaviour
 
         //Set target
         skeleton.GetComponent<SkeletonMovement>().SetTarget(availableSpots[rand].position);
-        wanderState = WanderState.Wander;
+        wanderState = WanderState.wander;
     }
 }

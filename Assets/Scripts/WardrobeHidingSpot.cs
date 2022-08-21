@@ -188,10 +188,9 @@ public class WardrobeHidingSpot : HidingSpot
             }
         }
 
-        if (col.gameObject.tag == "Skeleman")
-        {
-            SkeletonBehavior.instance.PlayerFoundHiding = isPlayerHiding;
-        }
+        //if (col.gameObject.tag == "Skeleman")
+        //{
+        //    SkeletonBehavior.instance.PlayerFoundHiding = isPlayerHiding;
+        //}
     }
-
 }

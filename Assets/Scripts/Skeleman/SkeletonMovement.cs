@@ -26,7 +26,6 @@ public class SkeletonMovement : MonoBehaviour
             if (navAgent.remainingDistance <= navAgent.stoppingDistance)
             {
                 arrived = true;
-                //TODO: Activate a coroutine in skeleton behavior
             }
         }
     }
@@ -39,6 +38,11 @@ public class SkeletonMovement : MonoBehaviour
         get { return arrived; }
     }
 
+    public bool HasDestination
+    {
+        get { return navAgent.hasPath; }
+    }
+
 
     public void SetTarget(Vector3 target)
     {
@@ -48,10 +52,7 @@ public class SkeletonMovement : MonoBehaviour
         arrived = false;
     }
 
-    public void Stop()
-    {
-        navAgent.isStopped = true;
-    }
+
 
     #endregion
 

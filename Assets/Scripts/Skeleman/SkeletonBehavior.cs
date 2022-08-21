@@ -17,8 +17,8 @@ public partial class SkeletonBehavior : MonoBehaviour
     [SerializeField] private GameObject skeleton;
 
     //State
-    private enum State {dormant, observe, wander, hunt, chase};
-    private State state;
+    public enum State {dormant, observe, wander, hunt, chase};
+    public State state;
 
     //Properties
     private bool gameStarted;
@@ -32,8 +32,11 @@ public partial class SkeletonBehavior : MonoBehaviour
     private bool timerFinished;
 
     private List<Room> previousRooms;
-    
-   
+
+    //TESTING
+    [Header("Debug")]
+    public bool debug;
+    public bool startWanderState;
 
     private void Awake()
     {
@@ -71,7 +74,23 @@ public partial class SkeletonBehavior : MonoBehaviour
     {
         if (!gameStarted) return;
 
-        ProgressCheck();
+
+        //NOTE: This is a debug part, not needed
+        if (debug)
+        {
+            if (startWanderState)
+            {
+                startWanderState = false;
+                state = State.wander;
+                wanderState = WanderState.startWander;
+                skeleton.GetComponent<SkeletonMovement>().enabled = true;
+                skeleton.GetComponent<NavMeshAgent>().enabled = true;
+            }
+        }
+        else 
+        {
+            ProgressCheck();
+        }
 
         switch(state)
         {
@@ -123,7 +142,7 @@ public partial class SkeletonBehavior : MonoBehaviour
             if (keyPercent > .4f)
             {
                 state = State.wander;
-                wanderState = WanderState.Wander;
+                wanderState = WanderState.startWander;
                 skeleton.GetComponent<SkeletonMovement>().enabled = true;
                 skeleton.GetComponent<NavMeshAgent>().enabled = true;
             }

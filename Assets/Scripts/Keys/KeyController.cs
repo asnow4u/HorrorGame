@@ -33,7 +33,7 @@ public class KeyController : MonoBehaviour
 
     void Start()
     {
-        SpawnKeys();
+        //SpawnKeys();
     }
 
 
