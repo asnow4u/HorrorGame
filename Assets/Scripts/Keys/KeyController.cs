@@ -36,6 +36,16 @@ public class KeyController : MonoBehaviour
         //SpawnKeys();
     }
 
+    public bool spawnKeys;
+    private void Update()
+    {
+        if (spawnKeys)
+        {
+            spawnKeys = false;
+            SpawnKeys();
+        }
+    }
+
 
     #region Getter / Setter
 

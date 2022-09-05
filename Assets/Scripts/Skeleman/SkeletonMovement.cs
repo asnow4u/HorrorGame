@@ -10,7 +10,6 @@ using UnityEngine.AI;
 public class SkeletonMovement : MonoBehaviour
 {
     private NavMeshAgent navAgent;
-    private bool arrived;
 
     // Start is called before the first frame update
     void Awake()
@@ -21,35 +20,37 @@ public class SkeletonMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (arrived == false)
-        {
-            if (navAgent.remainingDistance <= navAgent.stoppingDistance)
-            {
-                arrived = true;
-            }
-        }
+        //if (arrived == false)
+        //{
+        //    if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+        //    {
+        //        Debug.Log("Arrived is set to true");
+        //        arrived = true;
+        //    }
+        //}
     }
 
 
     #region
 
-    public bool Arrived
+    public bool HasArrived()
     {
-        get { return arrived; }
-    }
+        if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+        {
+            return true;
+        }
 
-    public bool HasDestination
-    {
-        get { return navAgent.hasPath; }
+        return false;
     }
+    
 
 
     public void SetTarget(Vector3 target)
     {
-        if (arrived == false) return;
+        navAgent.SetDestination(target);
 
-        navAgent.destination = target;
-        arrived = false;
+        Room room = RoomController.instance.GetRoom(target);
+        Debug.Log("target is set " + room.gameObject.name);
     }
 
 
