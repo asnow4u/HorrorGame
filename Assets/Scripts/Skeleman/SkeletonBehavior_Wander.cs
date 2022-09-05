@@ -60,21 +60,17 @@ public partial class SkeletonBehavior : MonoBehaviour
                     //if (keyPercent * 100f >= rand)
                     //{
 
-                    //        //Change State
-                    //        wanderState = WanderState.inRoomSearch;
+                    //Change State
+                    wanderState = WanderState.inRoomSearch;
 
-                    //        //Determine hiding spots
-                    //        SelectHidingSpot();
-                    //}
 
                     //Not Searching Hiding Spot
                     //    else
                     //    {
-                    wanderState = WanderState.startWander;
+                    //wanderState = WanderState.startWander;
                     //    }
 
                     //Small pause before search
-                    timerFinished = false;
                     StartCoroutine(Wait(wanderIdleRoomTimer)); //Look around room animation
                 }
 
@@ -83,48 +79,56 @@ public partial class SkeletonBehavior : MonoBehaviour
 
             //Actions taking place when searching a room
             case WanderState.inRoomSearch:
-                //Debug.Log("In Room Search case");
-                //if (timerFinished)
-                //{
-                //    skeleton.GetComponent<SkeletonMovement>().SetTarget(selectedHidingSpot.position);
-                //    //wanderState = WanderState.HidingSpotSearch;
+                
+                if (timerFinished)
+                {
+                    
+                    //Determine hiding spots
+                    Transform hidingSpot = SelectHidingSpot();
+                   
+                    if (hidingSpot == null)
+                    {
+                        wanderState = WanderState.startWander;
+                        return;
+                    }
 
-                //    if (skeleton.GetComponent<SkeletonMovement>().Arrived)
-                //    {
-
-                //        //TODO: We may need an addition state reprecenting the searching that happens
-
-                //        if (playerFoundHiding)
-                //        {
-                //            //TODO: if player then they lose
-                //            Debug.Log("You Were caught");
-                //        }
-
-                //        wanderState = WanderState.hidingSpotSearch;
-                //        StartCoroutine(Wait(searchHidingSpotTimer));
-                //    }
-                //}    
+                    skeleton.GetComponent<SkeletonMovement>().SetTarget(hidingSpot.position);
+                    wanderState = WanderState.hidingSpotSearch;
+                }    
 
                 break;
 
 
             case WanderState.hidingSpotSearch:
-                //Debug.Log("Hiding Spot Search case");
-                //if (timerFinished)
-                //{
-                //    wanderState = WanderState.startWander;
-                //}
+
+                if (skeleton.GetComponent<SkeletonMovement>().HasArrived())
+                {
+
+                    //TODO: if player then they lose
+                    //if (playerFoundHiding)
+                    //{
+                    //    Debug.Log("You Were caught");
+                    //}
+
+                    //TODO: This would move to a different state after searching
+                    wanderState = WanderState.startWander;
+                    StartCoroutine(Wait(searchHidingSpotTimer));
+                }
+
                 break;
         }
     }
 
 
-    private void SelectHidingSpot()
+    /// <summary>
+    /// Determine which hiding spot to search
+    /// </summary>
+    private Transform SelectHidingSpot()
     {
         //Check if in a searchable room
         if (RoomController.instance.SkeletonRoom == null)
         {
-            return;
+            return null;
         }
 
         List<HidingSpot> hidingSpots =  new List<HidingSpot>(RoomController.instance.SkeletonRoom.HidingSpots);
@@ -132,16 +136,14 @@ public partial class SkeletonBehavior : MonoBehaviour
         //No hiding spots, wait idle
         if (hidingSpots.Count == 0)
         {
-            return;
+            return null;
         }
 
         //One hiding spot
         if (hidingSpots.Count == 1)
         {
             //Check the hiding spot
-            Debug.Log("Checking Hiding Spot: " + hidingSpots[0].name);
-            selectedHidingSpot = hidingSpots[0].transform;
-            return;
+            return hidingSpots[0].GetSkeletonSearchSpot();
         }
 
         //Two or more hiding spots
@@ -156,8 +158,7 @@ public partial class SkeletonBehavior : MonoBehaviour
 
         int rand = Random.Range(0, availbleSpots.Count);
         
-        Debug.Log("Checking Hiding Spot: " + hidingSpots[rand].name);
-        selectedHidingSpot = hidingSpots[rand].transform;
+        return hidingSpots[rand].GetSkeletonSearchSpot();
     }
 
 

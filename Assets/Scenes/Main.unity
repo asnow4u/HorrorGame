@@ -23917,7 +23917,6 @@ MonoBehaviour:
   type: 8
   lights: []
   key: {fileID: 1189789160}
-  hiding: {fileID: 1761067079}
   dormant: {fileID: 1830534849}
   observe: {fileID: 1400123843}
   wander: {fileID: 583269566}
@@ -24545,7 +24544,6 @@ MonoBehaviour:
   type: 0
   lights: []
   key: {fileID: 418788816}
-  hiding: {fileID: 1085823166}
   dormant: {fileID: 1315433558}
   observe: {fileID: 1262118422}
   wander: {fileID: 1335314016}
@@ -24882,7 +24880,6 @@ MonoBehaviour:
   type: 6
   lights: []
   key: {fileID: 2075092540}
-  hiding: {fileID: 1179923267}
   dormant: {fileID: 1717595555}
   observe: {fileID: 1188094295}
   wander: {fileID: 1255560779}
@@ -25202,7 +25199,6 @@ MonoBehaviour:
   type: 1
   lights: []
   key: {fileID: 1101458973}
-  hiding: {fileID: 736550835}
   dormant: {fileID: 1276556433}
   observe: {fileID: 1335805679}
   wander: {fileID: 83988875}
@@ -25669,7 +25665,6 @@ MonoBehaviour:
   type: 7
   lights: []
   key: {fileID: 1676758243}
-  hiding: {fileID: 1847212177}
   dormant: {fileID: 1164559690}
   observe: {fileID: 1680841332}
   wander: {fileID: 1337045015}
@@ -25793,7 +25788,6 @@ MonoBehaviour:
   type: 4
   lights: []
   key: {fileID: 1727286469}
-  hiding: {fileID: 1014110725}
   dormant: {fileID: 244494255}
   observe: {fileID: 1352221866}
   wander: {fileID: 1656282010}
@@ -26128,7 +26122,6 @@ MonoBehaviour:
   type: 5
   lights: []
   key: {fileID: 2020625337}
-  hiding: {fileID: 2121370243}
   dormant: {fileID: 279411906}
   observe: {fileID: 1387651850}
   wander: {fileID: 1983449511}
@@ -26303,7 +26296,6 @@ MonoBehaviour:
   type: 2
   lights: []
   key: {fileID: 2130195971}
-  hiding: {fileID: 295210206}
   dormant: {fileID: 571441667}
   observe: {fileID: 369812764}
   wander: {fileID: 1002243974}
@@ -26410,7 +26402,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7086198697922528331
 Transform:
   m_ObjectHideFlags: 0
@@ -26714,7 +26706,6 @@ MonoBehaviour:
   type: 3
   lights: []
   key: {fileID: 1791356796}
-  hiding: {fileID: 916214566}
   dormant: {fileID: 1457253180}
   observe: {fileID: 1303640749}
   wander: {fileID: 2008768877}

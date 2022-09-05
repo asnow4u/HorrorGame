@@ -9,7 +9,7 @@ using UnityEngine.AI;
 
 public class SkeletonMovement : MonoBehaviour
 {
-    private NavMeshAgent navAgent;
+    public NavMeshAgent navAgent; //TODO: make private
 
     // Start is called before the first frame update
     void Awake()
@@ -35,9 +35,12 @@ public class SkeletonMovement : MonoBehaviour
 
     public bool HasArrived()
     {
-        if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+        if (!navAgent.pathPending)
         {
-            return true;
+            if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+            {
+                return true;
+            }
         }
 
         return false;
@@ -50,7 +53,6 @@ public class SkeletonMovement : MonoBehaviour
         navAgent.SetDestination(target);
 
         Room room = RoomController.instance.GetRoom(target);
-        Debug.Log("target is set " + room.gameObject.name);
     }
 
 
