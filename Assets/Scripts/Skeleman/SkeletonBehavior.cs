@@ -37,6 +37,7 @@ public partial class SkeletonBehavior : MonoBehaviour
     [Header("Debug")]
     public bool debug;
     public bool startWanderState;
+    public bool startHuntState;
 
     private void Awake()
     {
@@ -83,6 +84,15 @@ public partial class SkeletonBehavior : MonoBehaviour
                 startWanderState = false;
                 state = State.wander;
                 wanderState = WanderState.startWander;
+                skeleton.GetComponent<SkeletonMovement>().enabled = true;
+                skeleton.GetComponent<NavMeshAgent>().enabled = true;
+            }
+
+            if (startHuntState)
+            {
+                startHuntState = false;
+                state = State.hunt;
+                
                 skeleton.GetComponent<SkeletonMovement>().enabled = true;
                 skeleton.GetComponent<NavMeshAgent>().enabled = true;
             }

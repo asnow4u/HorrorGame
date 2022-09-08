@@ -43,7 +43,7 @@ public partial class SkeletonBehavior : MonoBehaviour
             case WanderState.startWander:
 
                 if (timerFinished) 
-                    SetNextRoom();
+                    SetNextWanderRoom();
 
                 break;
 
@@ -56,6 +56,7 @@ public partial class SkeletonBehavior : MonoBehaviour
                 
                     int rand = (int)Random.Range(0f, 100f); //TODO: For hunts there should be a higher chance to search the room
 
+                    //TODO: Base this off of key percentage
                     //Searching Hiding Spot
                     //if (keyPercent * 100f >= rand)
                     //{
@@ -165,7 +166,7 @@ public partial class SkeletonBehavior : MonoBehaviour
     /// <summary>
     /// Set up destination target to a room no previously visited
     /// </summary>
-    public void SetNextRoom() //TODO: Use this for hunts as well
+    public void SetNextWanderRoom()
     {
         //Randomize Room
         List<Room> availableRooms = new List<Room>();
@@ -182,7 +183,6 @@ public partial class SkeletonBehavior : MonoBehaviour
 
         //Previous room
         previousRooms.Add(availableRooms[rand]);
-
         prevRoomNames.Add(availableRooms[rand].name); //TODO: Remove 
 
         if (previousRooms.Count > previousRoomCap)
