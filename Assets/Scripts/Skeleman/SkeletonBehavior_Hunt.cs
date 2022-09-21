@@ -27,7 +27,7 @@ public partial class SkeletonBehavior : MonoBehaviour
     [SerializeField] private float huntRoomMin;
     [SerializeField] private float huntRoomMax;
 
-    private enum HuntState {startHunt, hunt, inTransitHunt, inRoomSearch, endHunt }
+    private enum HuntState {startHunt, hunt, inTransitHunt, inRoomSearch, hidingSpotSearch, endHunt }
     [SerializeField] private HuntState huntState;
 
     private float huntDuration;
@@ -81,29 +81,19 @@ public partial class SkeletonBehavior : MonoBehaviour
 
                 if (skeleton.GetComponent<SkeletonMovement>().HasArrived())
                 {
-                    //TODO: Randomize if searching (based on key percentage)
-
-                    if (true)
+                    
+                    //Continue hunting (not searching room)
+                    if (huntSpotCount < huntSpots.Count)
                     {
-                        huntState = HuntState.inRoomSearch;
-
+                        huntState = HuntState.hunt;
                     }
 
+                    //Reached final room
                     else
                     {
-
-                        //Continue hunting (not searching room)
-                        if (huntSpotCount < huntSpots.Count)
-                        {
-                            huntState = HuntState.hunt;
-                        }
-
-                        else
-                        {
-                            huntState = HuntState.endHunt;
-                        }
+                        huntState = HuntState.inRoomSearch;
                     }
-
+                    
                     StartCoroutine(Wait(wanderIdleRoomTimer));
                 }
 
@@ -112,6 +102,32 @@ public partial class SkeletonBehavior : MonoBehaviour
 
             case HuntState.inRoomSearch:
 
+                if (timerFinished)
+                {
+                    Transform hidingSpot = SelectHidingSpot();
+
+                    skeleton.GetComponent<SkeletonMovement>().SetTarget(hidingSpot.position);
+                    huntState = HuntState.hidingSpotSearch;
+                }
+
+                break;
+
+
+            case HuntState.hidingSpotSearch:
+
+                if (skeleton.GetComponent<SkeletonMovement>().HasArrived())
+                {
+                    //TODO: if player then they lose
+                    //if (playerFoundHiding)
+                    //{
+                    //    Debug.Log("You Were caught");
+                    //}
+
+                    //Destroy hiding spot
+                    huntState = HuntState.endHunt;
+                    StartCoroutine(Wait(searchHidingSpotTimer));
+                }
+
                 break;
 
 
@@ -119,8 +135,8 @@ public partial class SkeletonBehavior : MonoBehaviour
 
                 if (timerFinished)
                 {
-                    //TODO: restore to previous state
-
+                    state = State.wander;
+                    wanderState = WanderState.startWander;
                 }
 
                 break;
@@ -167,6 +183,7 @@ public partial class SkeletonBehavior : MonoBehaviour
             availableRooms.RemoveAt(rand);
         }
     }
+
 
 
     private void CheckHuntTimer()

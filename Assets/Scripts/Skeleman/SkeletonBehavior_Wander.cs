@@ -126,6 +126,8 @@ public partial class SkeletonBehavior : MonoBehaviour
     /// </summary>
     private Transform SelectHidingSpot()
     {
+        //TODO: dont count hiding spot if broken
+
         //Check if in a searchable room
         if (RoomController.instance.SkeletonRoom == null)
         {

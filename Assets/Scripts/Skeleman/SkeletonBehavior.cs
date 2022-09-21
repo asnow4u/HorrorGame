@@ -20,6 +20,8 @@ public partial class SkeletonBehavior : MonoBehaviour
     public enum State {dormant, observe, wander, hunt, chase};
     public State state;
 
+
+
     //Properties
     private bool gameStarted;
     private float keyPercent;
