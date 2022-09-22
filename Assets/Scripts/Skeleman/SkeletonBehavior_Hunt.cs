@@ -35,6 +35,7 @@ public partial class SkeletonBehavior : MonoBehaviour
 
     private List<Transform> huntSpots;
     private int huntSpotCount;
+    private HidingSpot huntHidingSpot;
 
     #region Getter/Setter
 
@@ -55,10 +56,9 @@ public partial class SkeletonBehavior : MonoBehaviour
             case HuntState.startHunt:
 
                 //TODOS:
-                //Reset
                 huntSpotCount = 0;
                 //Hunt effect
-                SelectRoomsToHunt();
+                huntSpots = SelectRoomsToHunt();
                 StartCoroutine(Wait(0.2f));
                 huntState = HuntState.hunt;
 
@@ -104,9 +104,9 @@ public partial class SkeletonBehavior : MonoBehaviour
 
                 if (timerFinished)
                 {
-                    Transform hidingSpot = SelectHidingSpot();
+                    huntHidingSpot = SelectHidingSpot();
 
-                    skeleton.GetComponent<SkeletonMovement>().SetTarget(hidingSpot.position);
+                    skeleton.GetComponent<SkeletonMovement>().SetTarget(huntHidingSpot.GetSkeletonSearchSpot().position);
                     huntState = HuntState.hidingSpotSearch;
                 }
 
@@ -124,6 +124,8 @@ public partial class SkeletonBehavior : MonoBehaviour
                     //}
 
                     //Destroy hiding spot
+                    RoomController.instance.SkeletonRoom.HidingSpots.Remove(huntHidingSpot);
+
                     huntState = HuntState.endHunt;
                     StartCoroutine(Wait(searchHidingSpotTimer));
                 }
@@ -137,6 +139,8 @@ public partial class SkeletonBehavior : MonoBehaviour
                 {
                     state = State.wander;
                     wanderState = WanderState.startWander;
+
+                    //TODO: Reset hunt timer
                 }
 
                 break;
@@ -145,45 +149,56 @@ public partial class SkeletonBehavior : MonoBehaviour
     }
 
 
-    public void SelectRoomsToHunt()
+    public List<Transform> SelectRoomsToHunt()
     {
+        List<Transform> huntSpotsList = new List<Transform>();
 
         //Determine number of rooms to search
         int numRooms = (int)Random.Range(huntRoomMin, huntRoomMax);
 
-        //Randomize Rooms
-        List<Room> availableRooms = new List<Room>();
+        List<Room> availableRooms = new List<Room>(RoomController.instance.Rooms);
+        List<Room> selectedRooms = new List<Room>();
 
-        foreach (Room room in RoomController.instance.Rooms)
-        {
-            //Dont do room your in
-            if (room == RoomController.instance.SkeletonRoom) continue;
-
-            availableRooms.Add(room);
-        }
-
-
-        //Randomize Spot
+        //Create list of rooms
         for (int i=0; i<numRooms; i++)
         {
             int rand = Random.Range(0, availableRooms.Count);
 
-            List<Transform> availableSpots = new List<Transform>();
-
-            foreach (Transform transform in availableRooms[rand].WanderSpots)
+            //First room cant be your room
+            while (i == 0 && availableRooms[rand] == RoomController.instance.SkeletonRoom)
             {
-                //Add available spot
-                availableSpots.Add(transform);
-
-                rand = Random.Range(0, availableSpots.Count);
-
-                huntSpots.Add(availableSpots[rand]);
+                rand = Random.Range(0, availableRooms.Count);
             }
 
-            availableRooms.RemoveAt(rand);
-        }
-    }
+            //Cant check the same room back to back
+            while (i > 0 && selectedRooms[i-1] == availableRooms[rand])
+            {
+                rand = Random.Range(0, availableRooms.Count);
+            }
 
+            //Last room must have an available hidingspot
+            while (i == numRooms && (selectedRooms[i - 1] == availableRooms[rand] || availableRooms[rand].HidingSpots.Count > 0))
+            {
+                rand = Random.Range(0, availableRooms.Count);
+            }
+
+            selectedRooms.Add(availableRooms[rand]);
+        }
+
+
+        //Selected random wander spots
+        foreach (Room room in selectedRooms)
+        {
+            foreach (Transform transform in room.WanderSpots)
+            {
+                int rand = Random.Range(0, room.WanderSpots.Count);
+
+                huntSpotsList.Add(room.WanderSpots[rand]);
+            }
+        }
+
+        return huntSpotsList;
+    }
 
 
     private void CheckHuntTimer()

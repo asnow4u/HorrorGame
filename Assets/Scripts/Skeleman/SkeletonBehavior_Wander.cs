@@ -83,9 +83,9 @@ public partial class SkeletonBehavior : MonoBehaviour
                 
                 if (timerFinished)
                 {
-                    
+
                     //Determine hiding spots
-                    Transform hidingSpot = SelectHidingSpot();
+                    HidingSpot hidingSpot = SelectHidingSpot();
                    
                     if (hidingSpot == null)
                     {
@@ -93,7 +93,7 @@ public partial class SkeletonBehavior : MonoBehaviour
                         return;
                     }
 
-                    skeleton.GetComponent<SkeletonMovement>().SetTarget(hidingSpot.position);
+                    skeleton.GetComponent<SkeletonMovement>().SetTarget(hidingSpot.GetSkeletonSearchSpot().position);
                     wanderState = WanderState.hidingSpotSearch;
                 }    
 
@@ -124,10 +124,8 @@ public partial class SkeletonBehavior : MonoBehaviour
     /// <summary>
     /// Determine which hiding spot to search
     /// </summary>
-    private Transform SelectHidingSpot()
+    private HidingSpot SelectHidingSpot()
     {
-        //TODO: dont count hiding spot if broken
-
         //Check if in a searchable room
         if (RoomController.instance.SkeletonRoom == null)
         {
@@ -146,7 +144,7 @@ public partial class SkeletonBehavior : MonoBehaviour
         if (hidingSpots.Count == 1)
         {
             //Check the hiding spot
-            return hidingSpots[0].GetSkeletonSearchSpot();
+            return hidingSpots[0];
         }
 
         //Two or more hiding spots
@@ -161,7 +159,7 @@ public partial class SkeletonBehavior : MonoBehaviour
 
         int rand = Random.Range(0, availbleSpots.Count);
         
-        return hidingSpots[rand].GetSkeletonSearchSpot();
+        return hidingSpots[rand];
     }
 
 
