@@ -23,7 +23,6 @@ public partial class SkeletonBehavior : MonoBehaviour
     [Header("Hunt")]
     [SerializeField] private float huntTimeMin;
     [SerializeField] private float huntTimeMax;
-    [Range(1,2)]
     [SerializeField] private float huntRoomMin;
     [SerializeField] private float huntRoomMax;
 
@@ -57,9 +56,17 @@ public partial class SkeletonBehavior : MonoBehaviour
 
                 //TODOS:
                 huntSpotCount = 0;
-                //Hunt effect
                 huntSpots = SelectRoomsToHunt();
+
+                Debug.Log("Hunt: Hunt list created with " + huntSpots.Count + " spots");
+                foreach (Transform spot in huntSpots)
+                {
+                    Debug.Log(RoomController.instance.GetRoom(spot.position));
+                }
+
+                //Hunt effect
                 StartCoroutine(Wait(0.2f));
+                
                 huntState = HuntState.hunt;
 
                 break;
@@ -69,6 +76,7 @@ public partial class SkeletonBehavior : MonoBehaviour
 
                 if (timerFinished)
                 {
+                    Debug.Log("Hunt: Location set to " + RoomController.instance.GetRoom(huntSpots[huntSpotCount].position) + " (huntSpotCount of " + huntSpots.Count + ")");
                     skeleton.GetComponent<SkeletonMovement>().SetTarget(huntSpots[huntSpotCount].position);
                     huntSpotCount++;
                     huntState = HuntState.inTransitHunt;
@@ -106,6 +114,8 @@ public partial class SkeletonBehavior : MonoBehaviour
                 {
                     huntHidingSpot = SelectHidingSpot();
 
+                    Debug.Log("Hunt: Search hiding spot " + huntHidingSpot.name);
+
                     skeleton.GetComponent<SkeletonMovement>().SetTarget(huntHidingSpot.GetSkeletonSearchSpot().position);
                     huntState = HuntState.hidingSpotSearch;
                 }
@@ -125,6 +135,9 @@ public partial class SkeletonBehavior : MonoBehaviour
 
                     //Destroy hiding spot
                     RoomController.instance.SkeletonRoom.HidingSpots.Remove(huntHidingSpot);
+                    Debug.Log("Hunt: Destroy Hiding spot " + huntHidingSpot.name);
+                    huntHidingSpot.DestroyHidingSpot();
+
 
                     huntState = HuntState.endHunt;
                     StartCoroutine(Wait(searchHidingSpotTimer));
@@ -177,7 +190,7 @@ public partial class SkeletonBehavior : MonoBehaviour
             }
 
             //Last room must have an available hidingspot
-            while (i == numRooms && (selectedRooms[i - 1] == availableRooms[rand] || availableRooms[rand].HidingSpots.Count > 0))
+            while (i == numRooms-1 && (selectedRooms[i - 1] == availableRooms[rand] || availableRooms[rand].HidingSpots.Count == 0))
             {
                 rand = Random.Range(0, availableRooms.Count);
             }

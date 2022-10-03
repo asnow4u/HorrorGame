@@ -129,6 +129,7 @@ public partial class SkeletonBehavior : MonoBehaviour
         //Check if in a searchable room
         if (RoomController.instance.SkeletonRoom == null)
         {
+            Debug.LogWarning("Skeleton room was null when selecting hiding spot");
             return null;
         }
 
@@ -137,6 +138,7 @@ public partial class SkeletonBehavior : MonoBehaviour
         //No hiding spots, wait idle
         if (hidingSpots.Count == 0)
         {
+            Debug.LogWarning("Room has no hiding spots when selecting hiding spot");
             return null;
         }
 

@@ -86,4 +86,13 @@ public class HidingSpot : MonoBehaviour
             data.curFrame = i;
         }
     }
+
+
+    /// <summary>
+    /// Destroy the hiding spot and replace the parent with a destroyed version of the object
+    /// </summary>
+    public void DestroyHidingSpot()
+    {
+        Destroy(transform.parent.gameObject);
+    }
 }
