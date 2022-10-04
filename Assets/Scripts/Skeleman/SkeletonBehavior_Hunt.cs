@@ -68,6 +68,7 @@ public partial class SkeletonBehavior : MonoBehaviour
                 StartCoroutine(Wait(0.2f));
                 
                 huntState = HuntState.hunt;
+                Debug.Log("Skeleton: HuntState change to Hunt");
 
                 break;
 
@@ -80,6 +81,7 @@ public partial class SkeletonBehavior : MonoBehaviour
                     skeleton.GetComponent<SkeletonMovement>().SetTarget(huntSpots[huntSpotCount].position);
                     huntSpotCount++;
                     huntState = HuntState.inTransitHunt;
+                    Debug.Log("Skeleton: HuntState change to InTransitHunt");
                 }
 
                 break;
@@ -94,12 +96,14 @@ public partial class SkeletonBehavior : MonoBehaviour
                     if (huntSpotCount < huntSpots.Count)
                     {
                         huntState = HuntState.hunt;
+                        Debug.Log("Skeleton: HuntState change to Hunt");
                     }
 
                     //Reached final room
                     else
                     {
                         huntState = HuntState.inRoomSearch;
+                        Debug.Log("Skeleton: HuntState change to InRoomSearch");
                     }
                     
                     StartCoroutine(Wait(wanderIdleRoomTimer));
@@ -114,10 +118,11 @@ public partial class SkeletonBehavior : MonoBehaviour
                 {
                     huntHidingSpot = SelectHidingSpot();
 
-                    Debug.Log("Hunt: Search hiding spot " + huntHidingSpot.name);
+                    Debug.Log("Skeleton: Search hunt hiding spot " + huntHidingSpot.name);
 
                     skeleton.GetComponent<SkeletonMovement>().SetTarget(huntHidingSpot.GetSkeletonSearchSpot().position);
                     huntState = HuntState.hidingSpotSearch;
+                    Debug.Log("Skeleton: HuntState change to HidingSpotSearch");
                 }
 
                 break;
@@ -135,11 +140,11 @@ public partial class SkeletonBehavior : MonoBehaviour
 
                     //Destroy hiding spot
                     RoomController.instance.SkeletonRoom.HidingSpots.Remove(huntHidingSpot);
-                    Debug.Log("Hunt: Destroy Hiding spot " + huntHidingSpot.name);
+                    Debug.Log("Skeleton: Destroy Hiding Spot " + huntHidingSpot.name);
                     huntHidingSpot.DestroyHidingSpot();
 
-
                     huntState = HuntState.endHunt;
+                    Debug.Log("Skeleton: HuntState change to EndHunt");
                     StartCoroutine(Wait(searchHidingSpotTimer));
                 }
 
@@ -152,6 +157,7 @@ public partial class SkeletonBehavior : MonoBehaviour
                 {
                     state = State.wander;
                     wanderState = WanderState.startWander;
+                    Debug.Log("Skeleton: WanderState change to StartWander");
 
                     //TODO: Reset hunt timer
                 }
@@ -192,6 +198,8 @@ public partial class SkeletonBehavior : MonoBehaviour
             //Last room must have an available hidingspot
             while (i == numRooms-1 && (selectedRooms[i - 1] == availableRooms[rand] || availableRooms[rand].HidingSpots.Count == 0))
             {
+                //TODO: should make a list of unavailable rooms
+                //TODO: what happens when no room has hiding spots
                 rand = Random.Range(0, availableRooms.Count);
             }
 
@@ -207,6 +215,8 @@ public partial class SkeletonBehavior : MonoBehaviour
                 int rand = Random.Range(0, room.WanderSpots.Count);
 
                 huntSpotsList.Add(room.WanderSpots[rand]);
+
+                Debug.Log("Skeleton: HuntSpot at " + room.name);
             }
         }
 
@@ -223,7 +233,8 @@ public partial class SkeletonBehavior : MonoBehaviour
 
             //TODO: Start hunt
             //Debug.Log("HuntStarted");
-            
+            Debug.Log("Skeleton: State Change to Hunt");
+
         }
 
 

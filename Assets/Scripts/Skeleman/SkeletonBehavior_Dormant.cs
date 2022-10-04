@@ -6,20 +6,6 @@ using UnityEngine.AI;
 public partial class SkeletonBehavior : MonoBehaviour
 {
 
-    /*Requirements
-     * Similar to slender man, the more keys that are gathered the more active the skeleman becomes
-     * States of activity => dorment, observing, wander, hunt  
-     * States could be specified by a sound effect (grandfather clock?)
-     * 
-     * dorment: the skeleman will teleport around when not seen. And will be in places like on the stairs, in the kitchen, ect.
-     * In front of the stairs, on the bed, falls out of wardrobe
-     * Need:
-     * List of optional places to teleport
-     * Timer (dont want this to occur to often)
-     * User Room controller to determine where player is before moving
-    */
-
-
     private void UpdateDormant()
     {
         if (!timerFinished) return;
@@ -55,6 +41,8 @@ public partial class SkeletonBehavior : MonoBehaviour
 
         skeleton.transform.position = availbleSpots[rand].position;
         //TODO: Rotation
+
+        Debug.Log("Skeleton: Dormant location shit to " + RoomController.instance.GetRoom(skeleton.transform.position));
 
         StartCoroutine(Wait(dormantTimer));
     }

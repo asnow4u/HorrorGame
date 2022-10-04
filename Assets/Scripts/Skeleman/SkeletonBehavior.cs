@@ -69,6 +69,7 @@ public partial class SkeletonBehavior : MonoBehaviour
         previousRooms = new List<Room>();
 
         state = State.dormant;
+        Debug.Log("Skeleton: State Change to dormant");
         StartCoroutine(Wait(dormantTimer));
     }
 
@@ -145,6 +146,7 @@ public partial class SkeletonBehavior : MonoBehaviour
             if (keyPercent > .2f)
             {
                 state = State.observe;
+                Debug.Log("Skeleton: State Change to Observant");
             }
         }
 
@@ -154,7 +156,9 @@ public partial class SkeletonBehavior : MonoBehaviour
             if (keyPercent > .4f)
             {
                 state = State.wander;
+                Debug.Log("Skeleton: State Change to Wander");
                 wanderState = WanderState.startWander;
+                Debug.Log("Skeleton: WanderState Change to StartWander");
                 skeleton.GetComponent<SkeletonMovement>().enabled = true;
                 skeleton.GetComponent<NavMeshAgent>().enabled = true;
             }

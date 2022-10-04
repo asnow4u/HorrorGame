@@ -63,12 +63,14 @@ public partial class SkeletonBehavior : MonoBehaviour
 
                     //Change State
                     wanderState = WanderState.inRoomSearch;
+                    Debug.Log("Skeleton: WanderState change to InRoomSearch");
 
 
                     //Not Searching Hiding Spot
                     //    else
                     //    {
                     //wanderState = WanderState.startWander;
+                    //Debug.Log("Skeleton: WanderState change to startWander");
                     //    }
 
                     //Small pause before search
@@ -95,6 +97,7 @@ public partial class SkeletonBehavior : MonoBehaviour
 
                     skeleton.GetComponent<SkeletonMovement>().SetTarget(hidingSpot.GetSkeletonSearchSpot().position);
                     wanderState = WanderState.hidingSpotSearch;
+                    Debug.Log("Skeleton: WanderState change to HidingSpotSearch");
                 }    
 
                 break;
@@ -113,6 +116,7 @@ public partial class SkeletonBehavior : MonoBehaviour
 
                     //TODO: This would move to a different state after searching
                     wanderState = WanderState.startWander;
+                    Debug.Log("Skeleton: WanderState change to StartWander");
                     StartCoroutine(Wait(searchHidingSpotTimer));
                 }
 
@@ -129,7 +133,7 @@ public partial class SkeletonBehavior : MonoBehaviour
         //Check if in a searchable room
         if (RoomController.instance.SkeletonRoom == null)
         {
-            Debug.LogWarning("Skeleton room was null when selecting hiding spot");
+            Debug.LogWarning("Skeleton: Skeletonroom was null when selecting hiding spot");
             return null;
         }
 
@@ -138,7 +142,7 @@ public partial class SkeletonBehavior : MonoBehaviour
         //No hiding spots, wait idle
         if (hidingSpots.Count == 0)
         {
-            Debug.LogWarning("Room has no hiding spots when selecting hiding spot");
+            Debug.LogWarning("Skeleton: Room has no hiding spots when selecting hiding spot");
             return null;
         }
 
@@ -160,7 +164,9 @@ public partial class SkeletonBehavior : MonoBehaviour
         }
 
         int rand = Random.Range(0, availbleSpots.Count);
-        
+
+        Debug.Log("Skeleton: Hidingspot found " + hidingSpots[rand].transform.parent.name);
+
         return hidingSpots[rand];
     }
 
@@ -208,5 +214,7 @@ public partial class SkeletonBehavior : MonoBehaviour
         //Set target
         skeleton.GetComponent<SkeletonMovement>().SetTarget(availableSpots[rand].position);
         wanderState = WanderState.wander;
+        Debug.Log("Skeleton: WanderState change to wander");
+        Debug.Log("Skeleton: Wander target set to " + RoomController.instance.GetRoom(availableSpots[rand].position));
     }
 }
