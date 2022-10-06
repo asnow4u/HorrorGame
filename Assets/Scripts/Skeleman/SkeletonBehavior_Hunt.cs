@@ -29,8 +29,7 @@ public partial class SkeletonBehavior : MonoBehaviour
     private enum HuntState {startHunt, hunt, inTransitHunt, inRoomSearch, hidingSpotSearch, endHunt }
     [SerializeField] private HuntState huntState;
 
-    private float huntDuration;
-    private float huntTimer;
+    public float huntTimer;
 
     private List<Transform> huntSpots;
     private int huntSpotCount;
@@ -226,17 +225,16 @@ public partial class SkeletonBehavior : MonoBehaviour
 
     private void CheckHuntTimer()
     {
-        if (huntTimer < 0)
+        if (huntTimer <= 0)
         {
-            //TODO: Randomize huntduration between a min and max
             huntTimer = Random.Range(huntTimeMin, huntTimeMax);
 
-            //TODO: Start hunt
-            //Debug.Log("HuntStarted");
+            state = State.hunt;
+            huntState = HuntState.startHunt;
+            skeleton.GetComponent<SkeletonMovement>().enabled = true;
+            skeleton.GetComponent<NavMeshAgent>().enabled = true;
             Debug.Log("Skeleton: State Change to Hunt");
-
         }
-
 
         huntTimer -= Time.deltaTime;
     }

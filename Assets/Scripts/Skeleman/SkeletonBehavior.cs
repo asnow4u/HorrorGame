@@ -100,10 +100,10 @@ public partial class SkeletonBehavior : MonoBehaviour
                 skeleton.GetComponent<NavMeshAgent>().enabled = true;
             }
         }
-        else 
-        {
-            ProgressCheck();
-        }
+
+
+        ProgressCheck();
+        
 
         switch(state)
         {
