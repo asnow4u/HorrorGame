@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class DoorController : MonoBehaviour
 {
 
     [SerializeField] private Transform door;
-    
+
+    private NavMeshObstacle meshObsticle = null;
     private HingeJoint hinge;
     
     //Limit
@@ -24,6 +26,8 @@ public class DoorController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        meshObsticle = door.GetComponent<NavMeshObstacle>();
+
         hinge = door.GetComponent<HingeJoint>();
 
         //Limit
@@ -98,7 +102,30 @@ public class DoorController : MonoBehaviour
 
             hinge.spring = spring;
             hinge.useSpring = true;
+
+            //meshObsticle.enabled = true;
         }
+    }
+
+
+    private void OnTriggerStay(Collider col)
+    {
+        //TODO: Not perfect, can sometimes get stuck
+        //The Idea was to prevent doors from glitching
+        //if (col.gameObject.tag == "Skeleman")
+        //{
+        //    if (meshObsticle != null)
+        //    {
+        //        if (Mathf.RoundToInt(hinge.angle) <= minLimit || Mathf.RoundToInt(hinge.angle) >= maxLimit)
+        //        {
+        //            meshObsticle.enabled = true;
+        //        }
+        //        else
+        //        {
+        //            meshObsticle.enabled = false;
+        //        }
+        //    }
+        //}
     }
 
 
