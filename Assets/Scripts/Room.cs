@@ -7,10 +7,6 @@ public class Room : MonoBehaviour
 {
     [SerializeField] private RoomController.RoomType type;
     [SerializeField] private List<Light> lights;
-    //[SerializeField] private Transform key;
-    //[SerializeField] private Transform dormant;
-    //[SerializeField] private Transform observe;
-    //[SerializeField] private Transform wander;
 
     private List<Transform> keySpots;
     private List<HidingSpot> hidingSpots;

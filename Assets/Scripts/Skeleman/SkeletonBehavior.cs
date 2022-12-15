@@ -5,13 +5,6 @@ using UnityEngine.AI;
 
 public partial class SkeletonBehavior : MonoBehaviour
 {
-
-    /*Requirements
-     * Similar to slender man, the more keys that are gathered the more active the skeleman becomes
-     * States of activity => dorment, observing, wander, hunt  
-     * States could be specified by a sound effect (grandfather clock?)  
-    */
-
     public static SkeletonBehavior instance;
 
     [Header("Skeleton Properties")]
@@ -21,30 +14,20 @@ public partial class SkeletonBehavior : MonoBehaviour
     [SerializeField] private float sightAngle;
     [SerializeField] private float sightRange;
 
-    //State
-    public enum State {dormant, observe, wander, hunt, chase};
-    public State state;
-
-
-
-    //Properties
-    private bool gameStarted;
-    private float keyPercent;
-    
     //TODO: Some timers can be replaced with animation lengths
-    //Set Timers
+    [Header("Timers")]
     [SerializeField] private float dormantTimer;
     [SerializeField] private float wanderIdleRoomTimer;
     [SerializeField] private float searchHidingSpotTimer;
-    private bool timerFinished;
 
+    //States
+    public enum State {dormant, observe, wander, hunt, chase};
+    public State state;
+    
+    private bool gameStarted;
+    private bool timerFinished;
     private List<Room> previousRooms;
 
-    //TESTING
-    [Header("Debug")]
-    public bool debug;
-    public bool startWanderState;
-    public bool startHuntState;
 
     private void Awake()
     {
@@ -69,8 +52,7 @@ public partial class SkeletonBehavior : MonoBehaviour
     /// </summary>
     public void Initialize()
     {
-        gameStarted = true;
-
+        gameStarted = true; //TODO: Grab this from somewhere else
         previousRooms = new List<Room>();
 
         state = State.dormant;
@@ -79,33 +61,12 @@ public partial class SkeletonBehavior : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Update frame by frame
+    /// </summary>
     private void Update()
     {
         if (!gameStarted) return;
-
-
-        //NOTE: This is a debug part, not needed
-        if (debug)
-        {
-            if (startWanderState)
-            {
-                startWanderState = false;
-                state = State.wander;
-                wanderState = WanderState.startWander;
-                skeleton.GetComponent<SkeletonMovement>().enabled = true;
-                skeleton.GetComponent<NavMeshAgent>().enabled = true;
-            }
-
-            if (startHuntState)
-            {
-                startHuntState = false;
-                state = State.hunt;
-                
-                skeleton.GetComponent<SkeletonMovement>().enabled = true;
-                skeleton.GetComponent<NavMeshAgent>().enabled = true;
-            }
-        }
-
 
         ProgressCheck();
         
@@ -134,11 +95,15 @@ public partial class SkeletonBehavior : MonoBehaviour
         }
     }
 
+    public GameObject Skeleton
+    {
+        get { return skeleton; }
+    }
 
     private void ProgressCheck()
     {
 
-        //if (state == State.observe || state == State.wander || state == State.hunt)
+        if (state == State.observe || state == State.wander || state == State.hunt)
         {
             if (CheckForPlayer())
             {
@@ -187,8 +152,6 @@ public partial class SkeletonBehavior : MonoBehaviour
         {
             CheckHuntTimer();
         }
-
-        
     }
 
 
@@ -211,14 +174,28 @@ public partial class SkeletonBehavior : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, sightRange, LayerMask.NameToLayer("Room")))
             {
-                Debug.Log(hit.transform.name);
 
                 if (hit.transform.tag == "Player")
                 {
 
                     Debug.Log("Player seen");
 
+                    //TODO: if observe start a timer, if contact is never broken start chase
+                    //Set observe off
+                    
 
+                    if (state != State.chase)
+                    {
+                        wanderState = WanderState.startWander;
+                        huntState = HuntState.startHunt;
+
+                        skeleton.GetComponent<SkeletonMovement>().ClearDestination();
+
+                        state = State.chase;
+                        chaseState = ChaseState.startChase;
+                    }
+
+                    return true;
                 }
             }
         }
@@ -235,5 +212,34 @@ public partial class SkeletonBehavior : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         timerFinished = true;
+    }
+
+
+
+
+    //Debug
+    [ContextMenu("Set To Wander")]
+    public void SetToWander()
+    {
+        state = State.wander;
+     
+        wanderState = WanderState.startWander;
+        skeleton.GetComponent<SkeletonMovement>().enabled = true;
+        skeleton.GetComponent<NavMeshAgent>().enabled = true;
+    }
+
+    [ContextMenu("Set To Hunt")]
+    public void SetToHunt()
+    {
+        state = State.hunt;
+
+        skeleton.GetComponent<SkeletonMovement>().enabled = true;
+        skeleton.GetComponent<NavMeshAgent>().enabled = true;
+    }
+
+    [ContextMenu("Set To Chase")]
+    public void SetToChase()
+    {
+
     }
 }

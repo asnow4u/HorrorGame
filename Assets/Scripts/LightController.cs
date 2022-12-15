@@ -5,45 +5,55 @@ using UnityEngine;
 public class LightController : MonoBehaviour
 {
 
-    [SerializeField] private float maxIntensity;
-
+    [SerializeField] private float killDistance;
     [Range(0, 10)]
     [SerializeField] private float frequency;
 
     private Light light;
-
-
+    private float maxIntensity;
+    public float curIntensity;
+    private float distance;
+    private float time;
 
     // Start is called before the first frame update
     void Start()
     {
-        TryGetComponent<Light>(out light);
+        light = GetComponent<Light>();
+
+        maxIntensity = light.intensity;
+        curIntensity = maxIntensity;
+        distance = Mathf.Infinity;
+        time = 0;
     }
 
 
-    public IEnumerator LightShift(float time)
-    {
-        while (time > 0)
-        {
-
-            float intensity = maxIntensity * Mathf.Sin(frequency * time) + maxIntensity;
-            light.intensity = intensity;
-
-            time -= Time.deltaTime;
-
-            yield return null;
-        }
-    }
-
-
-    //Debug
-    public bool lightShift;
+    //TODO: Probably need to update after each iteration of the sine wave
     private void Update()
     {
-        if (lightShift)
-        {
-            lightShift = false;
-            StartCoroutine(LightShift(100f));
-        }
+        //distance = Vector3.Distance(transform.position, SkeletonBehavior.instance.Skeleton.transform.position);
+
+        //if (distance < killDistance)
+        //{
+        //    if (light.enabled)
+        //    {
+        //        light.enabled = false;
+        //    }
+
+        //    return;
+        //}
+
+        ////NOTE: Well have the light turn on only after the skeloton has left
+        //if (!light.enabled)
+        //{
+        //    light.enabled = true;
+        //}
+
+        //curIntensity = distance / 15f;
+
+        //float intensity = curIntensity * Mathf.Sin(frequency * time) + curIntensity;
+
+        //light.intensity = intensity;
+
+        //time += Time.deltaTime;
     }
 }

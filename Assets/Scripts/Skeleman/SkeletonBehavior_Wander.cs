@@ -16,6 +16,8 @@ public partial class SkeletonBehavior : MonoBehaviour
      * Move speed (will increase based on on how well the player is doing)   
     */
     private enum WanderState {startWander, wander, inRoomSearch, hidingSpotSearch};
+    
+    [Header("Wander")]
     [SerializeField] private WanderState wanderState;
     [SerializeField] private int previousRoomCap;
 
@@ -42,8 +44,10 @@ public partial class SkeletonBehavior : MonoBehaviour
             //Set destination to wander to after idle time finishes
             case WanderState.startWander:
 
-                if (timerFinished) 
+                if (timerFinished)
+                {
                     SetNextWanderRoom();
+                } 
 
                 break;
 

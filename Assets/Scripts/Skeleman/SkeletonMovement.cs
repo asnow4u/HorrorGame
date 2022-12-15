@@ -42,19 +42,30 @@ public class SkeletonMovement : MonoBehaviour
                 return true;
             }
         }
-
+        
         return false;
     }
-    
 
 
+    public GameObject debugSphere;
     public void SetTarget(Vector3 target)
     {
         navAgent.SetDestination(target);
 
         Room room = RoomController.instance.GetRoom(target);
+
+        if (SkeletonBehavior.instance.state == SkeletonBehavior.State.chase)
+        {
+            GameObject go = Instantiate(debugSphere);
+            go.transform.position = target;
+        }
     }
 
+
+    public void ClearDestination()
+    {
+        navAgent.ResetPath();
+    }
 
 
     #endregion

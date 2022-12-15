@@ -53,7 +53,6 @@ public partial class SkeletonBehavior : MonoBehaviour
         {
             case HuntState.startHunt:
 
-                //TODOS:
                 huntSpotCount = 0;
                 huntSpots = SelectRoomsToHunt();
 

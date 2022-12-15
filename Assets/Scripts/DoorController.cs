@@ -46,7 +46,7 @@ public class DoorController : MonoBehaviour
             Force(force);
         }
     }
-
+    
 
     public void Force(float openForce)
     {
