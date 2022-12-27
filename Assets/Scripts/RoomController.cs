@@ -48,6 +48,11 @@ public class RoomController : MonoBehaviour
     #endregion
 
 
+    /// <summary>
+    /// Return room that pos is in
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     public Room GetRoom(Vector3 pos)
     {
         foreach(Room room in rooms)
@@ -59,5 +64,27 @@ public class RoomController : MonoBehaviour
         }
 
         return null;
+    }
+
+
+    /// <summary>
+    /// Return random room not included in the provided list
+    /// </summary>
+    /// <param name="excludeList"></param>
+    /// <returns></returns>
+    public Room GetRandomRoom(List<Room> excludeList)
+    {
+        List<Room> availableRooms = new List<Room>();
+
+        foreach (Room room in Rooms)
+        {
+            if (excludeList.Contains(room)) continue;
+
+            availableRooms.Add(room);
+        }
+
+        int rand = Random.Range(0, availableRooms.Count);
+
+        return availableRooms[rand];
     }
 }

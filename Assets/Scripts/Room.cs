@@ -11,7 +11,6 @@ public class Room : MonoBehaviour
     private List<Transform> keySpots;
     private List<HidingSpot> hidingSpots;
     private List<Transform> dormantSpots;
-    private List<Transform> observeSpots;
     private List<Transform> wanderSpots;
 
     RoomController controller;
@@ -21,7 +20,6 @@ public class Room : MonoBehaviour
 
         keySpots = new List<Transform>();
         dormantSpots = new List<Transform>();
-        observeSpots = new List<Transform>();
         wanderSpots = new List<Transform>();
 
         //Get all key locations
@@ -38,13 +36,6 @@ public class Room : MonoBehaviour
         foreach (Transform child in dormant)
         {
             dormantSpots.Add(child);
-        }
-
-        //Get all skeleton observe locations
-        Transform observe = loc.Find("ObserveLoc");
-        foreach (Transform child in observe)
-        {
-            observeSpots.Add(child);
         }
 
         //Get all skeleton wander locations
@@ -98,17 +89,44 @@ public class Room : MonoBehaviour
         get { return dormantSpots; }
     }
 
-    public List<Transform> ObserveSpots
-    {
-        get { return observeSpots; }
-    }
-
     public List<Transform> WanderSpots
     {
         get { return wanderSpots; }
     }
 
     #endregion
+
+    /// <summary>
+    /// Return Random Hiding Spot
+    /// </summary>
+    public HidingSpot GetRandomHidingSpotWithOutPlayer()
+    {
+        //No hiding spots
+        if (hidingSpots.Count == 0)
+        {
+            return null;
+        }
+
+        //One Hiding Spot
+        if (hidingSpots.Count == 1)
+        {
+            return hidingSpots[0];
+        }
+
+        //Randomize Hiding Spot
+        List<HidingSpot> availableSpots = new List<HidingSpot>();
+        foreach (HidingSpot hidingSpot in hidingSpots)
+        {
+            if (hidingSpot.IsPlayerHiding) continue;
+            availableSpots.Add(hidingSpot);
+        }
+
+        int randSpot = Random.Range(0, availableSpots.Count);
+
+        Debug.Log("Skeleton: Hidingspot selected " + availableSpots[randSpot].transform.parent.name);
+
+        return availableSpots[randSpot];
+    }
 
 
     private void OnTriggerEnter(Collider other)

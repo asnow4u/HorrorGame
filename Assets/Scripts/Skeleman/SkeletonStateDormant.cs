@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public partial class SkeletonBehavior : MonoBehaviour
-{
-
+public partial class SkeletonStateManager : MonoBehaviour
+{    
     private void UpdateDormant()
     {
         if (!timerFinished) return;
@@ -20,6 +19,7 @@ public partial class SkeletonBehavior : MonoBehaviour
 
         List<Transform> availbleSpots = new List<Transform>();
 
+        //Determine all available spots
         foreach (Room room in RoomController.instance.Rooms)
         {
             //Spot not available
@@ -41,6 +41,7 @@ public partial class SkeletonBehavior : MonoBehaviour
 
         skeleton.transform.position = availbleSpots[rand].position;
         //TODO: Rotation
+        //skeleton.transform.rotation = availbleSpots[rand].rotation;
 
         Debug.Log("Skeleton: Dormant location shit to " + RoomController.instance.GetRoom(skeleton.transform.position));
 

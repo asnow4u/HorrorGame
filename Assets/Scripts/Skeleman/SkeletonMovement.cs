@@ -54,7 +54,7 @@ public class SkeletonMovement : MonoBehaviour
 
         Room room = RoomController.instance.GetRoom(target);
 
-        if (SkeletonBehavior.instance.state == SkeletonBehavior.State.chase)
+        if (SkeletonStateManager.instance.curState == SkeletonStateManager.State.chase)
         {
             GameObject go = Instantiate(debugSphere);
             go.transform.position = target;
