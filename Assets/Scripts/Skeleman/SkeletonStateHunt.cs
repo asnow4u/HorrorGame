@@ -95,6 +95,9 @@ public partial class SkeletonStateManager : MonoBehaviour
         //Hunt effect
         StartCoroutine(Wait(0.2f));
 
+        //Lighting effect
+        LightManager.instance.ChangeToHunt();
+
         huntState = HuntState.hunt;
         Debug.Log("Skeleton: HuntState change to Hunt");
     }
@@ -185,6 +188,8 @@ public partial class SkeletonStateManager : MonoBehaviour
     /// </summary>
     public void EndHunt()
     {
+        LightManager.instance.ChangeToNormal();
+
         ChangeState(State.wander);
         Debug.Log("Skeleton: WanderState change to StartWander");
     }

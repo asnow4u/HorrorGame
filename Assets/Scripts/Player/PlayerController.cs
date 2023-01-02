@@ -82,7 +82,5 @@ public class PlayerController : MonoBehaviour
         {
             transform.Translate(dir * walkSpeed * Time.deltaTime, Space.World);
         }
-
     }
-
 }

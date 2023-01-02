@@ -4,56 +4,102 @@ using UnityEngine;
 
 public class LightController : MonoBehaviour
 {
+    [Header("Flicker Properties")]
+    [SerializeField] private bool flicker;
+    [SerializeField] float maxFlickerIntensity;
+    [SerializeField] float minFlickerIntensity;
+    [SerializeField] float flickerDuration;
 
-    [SerializeField] private float killDistance;
-    [Range(0, 10)]
-    [SerializeField] private float frequency;
+    private bool inFlickerRise = true;
+    private float flickerInterval = 0;
 
     private Light light;
-    private float maxIntensity;
-    public float curIntensity;
-    private float distance;
-    private float time;
+    private bool changeingColor;
 
     // Start is called before the first frame update
     void Start()
     {
         light = GetComponent<Light>();
 
-        maxIntensity = light.intensity;
-        curIntensity = maxIntensity;
-        distance = Mathf.Infinity;
-        time = 0;
+        if (flicker)
+        {
+            light.intensity = minFlickerIntensity;
+        }
     }
 
 
-    //TODO: Probably need to update after each iteration of the sine wave
     private void Update()
     {
-        //distance = Vector3.Distance(transform.position, SkeletonBehavior.instance.Skeleton.transform.position);
+        if (changeingColor) return;
 
-        //if (distance < killDistance)
+        //Flicker
+        if (flicker)
+        {
+            //Intensity value increasing
+            if (inFlickerRise)
+            {
+                light.intensity = Mathf.Lerp(minFlickerIntensity, maxFlickerIntensity, flickerInterval / flickerDuration);
+                flickerInterval += Time.deltaTime;
+
+                if (flickerInterval > flickerDuration)
+                {
+                    inFlickerRise = false;
+                    flickerInterval = flickerDuration;
+                }
+            }
+
+            else
+            {
+                light.intensity = Mathf.Lerp(minFlickerIntensity, maxFlickerIntensity, flickerInterval / flickerDuration);
+                flickerInterval -= Time.deltaTime;
+
+                if (flickerInterval < 0)
+                {
+                    inFlickerRise = true;
+                    flickerInterval = 0;
+                }
+            }
+        }
+    }
+
+
+    public IEnumerator ChangeColor(Color color, float duration)
+    {
+        changeingColor = true;
+        float currentIntensity = light.intensity;
+        float time = 0;
+
+        //while (light.intensity > 0)
         //{
-        //    if (light.enabled)
-        //    {
-        //        light.enabled = false;
-        //    }
+        //    light.intensity = Mathf.Lerp(currentIntensity, 0, time / lightChangeDuration);
+        //    time += Time.deltaTime;
 
-        //    return;
+        //    yield return null;
         //}
 
-        ////NOTE: Well have the light turn on only after the skeloton has left
-        //if (!light.enabled)
+        //light.color = color;
+
+        //while (light.intensity < currentIntensity)
         //{
-        //    light.enabled = true;
+        //    light.intensity = Mathf.Lerp(currentIntensity, 0, time / lightChangeDuration);
+        //    time -= Time.deltaTime;
+
+        //    yield return null;
         //}
 
-        //curIntensity = distance / 15f;
+        Color currentColor = light.color;
 
-        //float intensity = curIntensity * Mathf.Sin(frequency * time) + curIntensity;
+        while (time / duration < 1)
+        {
+            light.color = Color.Lerp(currentColor, color, time / duration);
+            time += Time.deltaTime;
 
-        //light.intensity = intensity;
+            yield return null;
+        }
 
-        //time += Time.deltaTime;
+
+        light.intensity = currentIntensity;
+        changeingColor = false;
     }
 }
+
