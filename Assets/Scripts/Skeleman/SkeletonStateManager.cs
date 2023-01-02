@@ -77,7 +77,7 @@ public partial class SkeletonStateManager : MonoBehaviour
         if (!gameStarted) return;
 
         //Check for player in sight
-        if (CheckForPlayer())
+        if (curState != State.chase && CheckForPlayer())
         {
             ChangeState(State.chase);
         }

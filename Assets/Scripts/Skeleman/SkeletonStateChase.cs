@@ -5,21 +5,12 @@ using UnityEngine.AI;
 
 public partial class SkeletonStateManager : MonoBehaviour
 {
-
-    /*Requirements
-     * Chase: Skeleman is chasing the player
-     * When the player is seen the skeleman will chase them. (Navmesh just following them)
-     * If line of sight is broken, they will proceed to the last know location and look in the direction the player was looking at that time. 
-     *      If they see the player again they will continue pursuit.
-     *      If not, they will search the room for a bit, then will destroy one of the hidable locations. If only one remains the player is caught. If more than one exists the other hiding place will be destroyed
-     *          We will need to determine that the direction vector points to a room
-     * If the skeleman sees the player run into a hiding spot, they will be caught 
-    */
-
-    private enum ChaseState { startChase, chase, chaseSearch, chaseHidingSpot};
+    private enum ChaseState { startChase, chase, chaseInTransit, chaseSearch, chaseHidingSpot};
     
     [Header("Chase")]
     [SerializeField] private ChaseState chaseState;
+
+    private float playerDirectionRot;
 
 
     private void UpdateChase()
@@ -39,14 +30,25 @@ public partial class SkeletonStateManager : MonoBehaviour
                 break;
 
 
+            case ChaseState.chaseInTransit:
+
+                ChaseInTrasit();
+                break;
+
+
             case ChaseState.chaseSearch:
 
-                ChaseSearchRoom();                
+                if (skeletonMovement.HasArrived())
+                {
+                    ChaseSearchRoom();                
+                }
+
                 break;
+
 
             case ChaseState.chaseHidingSpot:
 
-                if (skeleton.GetComponent<SkeletonMovement>().HasArrived())
+                if (skeletonMovement.HasArrived())
                 {
                     ChaseHidingSpotSearch();
                 }
@@ -73,49 +75,73 @@ public partial class SkeletonStateManager : MonoBehaviour
         if (CheckForPlayer())
         {
             Transform player = PlayerController.instance.gameObject.transform;
-            skeleton.GetComponent<SkeletonMovement>().SetTarget(new Vector3(player.position.x, player.position.y - 2, player.position.z));
+            skeletonMovement.SetTarget(new Vector3(player.position.x, player.position.y - 2, player.position.z));
             skeleton.transform.LookAt(new Vector3(PlayerController.instance.transform.position.x, skeleton.transform.position.y, PlayerController.instance.transform.position.z));
+            playerDirectionRot = PlayerController.instance.transform.rotation.eulerAngles.y;
         }
 
         else
         {
             if (skeleton.GetComponent<SkeletonMovement>().HasArrived())
             {
-                //TODO: rememeber the direction of the player rot
-                //look that way and determine if player is in sight
+                Quaternion tempRot = skeletonHead.transform.rotation;
+                skeletonHead.transform.rotation = Quaternion.Euler(skeletonHead.transform.rotation.eulerAngles.x, playerDirectionRot, skeletonHead.transform.rotation.eulerAngles.z);
 
                 if (CheckForPlayer())
                 {
                     Transform player = PlayerController.instance.gameObject.transform;
-                    skeleton.GetComponent<SkeletonMovement>().SetTarget(new Vector3(player.position.x, player.position.y - 2, player.position.z));
+                    skeletonMovement.SetTarget(new Vector3(player.position.x, player.position.y - 2, player.position.z));
                     skeleton.transform.LookAt(new Vector3(PlayerController.instance.transform.position.x, skeleton.transform.position.y, PlayerController.instance.transform.position.z));
+                    playerDirectionRot = PlayerController.instance.transform.rotation.eulerAngles.y;
                 }
                 else
                 {
-                    chaseState = ChaseState.chaseSearch;
+                    chaseState = ChaseState.chaseInTransit;
                 }
 
+                skeletonHead.transform.rotation = tempRot;
             }
+        }
+    }
+
+
+    private void ChaseInTrasit()
+    {
+        if (RoomController.instance.PlayerRoom != null)
+        {
+            //Go to the players room
+            int randSpot = Random.Range(0, RoomController.instance.PlayerRoom.WanderSpots.Count);
+            skeletonMovement.SetTarget(RoomController.instance.PlayerRoom.WanderSpots[randSpot].position);
+
+            chaseState = ChaseState.chaseSearch;
+        }
+
+        else
+        {
+            ChangeState(State.hunt);
+            Debug.Log("Skeleton: State change to hunt");
         }
     }
 
 
     private void ChaseSearchRoom()
     {
-        //Check current room
-        if (RoomController.instance.SkeletonRoom != null)
+        //Search where player is hiding
+        HidingSpot hidingSpot = RoomController.instance.SkeletonRoom.GetRandomHidingSpotWithOutPlayer();
+               
+        if (hidingSpot != null)
         {
-            HidingSpot hidingSpot = RoomController.instance.SkeletonRoom.GetRandomHidingSpotWithOutPlayer();
-
-            if (hidingSpot != null)
-            {
-                skeleton.GetComponent<SkeletonMovement>().SetTarget(hidingSpot.GetSkeletonSearchSpot().position);
-                chaseState = ChaseState.chaseHidingSpot;
-                Debug.Log("Skeleton: chaseState change to chaseHidingSpotSearch");
-            }
+            skeletonMovement.SetTarget(hidingSpot.GetSkeletonSearchSpot().position);
+            chaseState = ChaseState.chaseHidingSpot;
+            Debug.Log("Skeleton: chaseState change to chaseHidingSpotSearch");
         }
 
-        ChangeState(State.hunt);
+        else
+        {
+            ChangeState(State.hunt);
+            Debug.Log("Skeleton: State change to hunt");
+            StartCoroutine(Wait(wanderIdleRoomTimer));
+        }
     }
 
 
@@ -127,8 +153,8 @@ public partial class SkeletonStateManager : MonoBehaviour
         //    Debug.Log("You Were caught");
         //}
 
-        ChangeState(State.wander);
-        Debug.Log("Skeleton: State change to Wander");
+        ChangeState(State.hunt);
+        Debug.Log("Skeleton: State change to hunt");
         StartCoroutine(Wait(searchHidingSpotTimer));
     }
 }

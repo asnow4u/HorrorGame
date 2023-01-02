@@ -216,7 +216,7 @@ public partial class SkeletonStateManager : MonoBehaviour
         for (int i=0; i<availableRooms.Count; i++)
         {
             //First room cant be your room
-            if (huntSpots.Count == 0 && availableRooms[i] == RoomController.instance.SkeletonRoom)
+            if (huntSpotsList.Count == 0 && availableRooms[i] == RoomController.instance.SkeletonRoom)
             {
                 continue;
             }
