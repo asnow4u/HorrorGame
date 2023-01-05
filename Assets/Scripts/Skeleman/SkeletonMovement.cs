@@ -11,6 +11,9 @@ public class SkeletonMovement : MonoBehaviour
 {
     public NavMeshAgent navAgent; //TODO: make private
 
+    public bool debug;
+    public GameObject debugSphere;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -47,7 +50,7 @@ public class SkeletonMovement : MonoBehaviour
     }
 
 
-    public GameObject debugSphere;
+
     public void SetTarget(Vector3 target)
     {
         navAgent.SetDestination(target);
@@ -56,8 +59,11 @@ public class SkeletonMovement : MonoBehaviour
 
         if (SkeletonStateManager.instance.curState == SkeletonStateManager.State.chase)
         {
-            GameObject go = Instantiate(debugSphere);
-            go.transform.position = target;
+            if (debug)
+            {
+                GameObject go = Instantiate(debugSphere);
+                go.transform.position = target;
+            }
         }
     }
 
