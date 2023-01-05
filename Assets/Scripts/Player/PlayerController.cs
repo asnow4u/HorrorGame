@@ -82,5 +82,28 @@ public class PlayerController : MonoBehaviour
         {
             transform.Translate(dir * walkSpeed * Time.deltaTime, Space.World);
         }
+
+        ObjectRayCast();
+    }
+
+    private void ObjectRayCast ()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
+        {
+            //Debug.Log(hit.transform.name);
+            Debug.DrawLine(Camera.main.transform.position, hit.point, Color.blue);
+
+            DoorController[] controllers = hit.transform.GetComponentsInChildren<DoorController>();
+
+            Debug.Log("You have this many door controllers: " + controllers.Length);
+
+
+            for (int i = 0; i < controllers.Length; i++)
+            {
+                controllers[i].force = 50;
+                controllers[i].forceOpen = true;
+            }
+        }
     }
 }
