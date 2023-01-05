@@ -12,10 +12,8 @@ public partial class SkeletonStateManager : MonoBehaviour
 
         Room playerRoom = RoomController.instance.PlayerRoom;
         Room skeletonRoom = RoomController.instance.SkeletonRoom;
-
-        //Prevent movement
-        if (playerRoom == null) return;
-        if (skeletonRoom != null && playerRoom.Type == skeletonRoom.Type) return;
+        
+        if (skeletonRoom != null && playerRoom != null && playerRoom.Type == skeletonRoom.Type) return;
 
         List<Transform> availbleSpots = new List<Transform>();
 
@@ -24,7 +22,7 @@ public partial class SkeletonStateManager : MonoBehaviour
         {
             //Spot not available
             if (skeletonRoom != null && room.Type == skeletonRoom.Type) continue;
-            if (room.Type == playerRoom.Type) continue;
+            if (playerRoom != null && room.Type == playerRoom.Type) continue;
 
             foreach (Transform transform in room.DormantSpots)
             {
@@ -36,6 +34,8 @@ public partial class SkeletonStateManager : MonoBehaviour
                 }
             }
         }
+        
+        if (availbleSpots.Count == 0) return;
 
         int rand = Random.Range(0, availbleSpots.Count);
 
@@ -43,7 +43,7 @@ public partial class SkeletonStateManager : MonoBehaviour
         //TODO: Rotation
         //skeleton.transform.rotation = availbleSpots[rand].rotation;
 
-        Debug.Log("Skeleton: Dormant location shit to " + RoomController.instance.GetRoom(skeleton.transform.position));
+        Debug.Log("Skeleton: Dormant location shift to " + RoomController.instance.GetRoom(skeleton.transform.position));
 
         StartCoroutine(Wait(dormantTimer));
     }
