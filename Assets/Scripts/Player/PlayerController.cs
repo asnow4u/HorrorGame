@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class PlayerController : MonoBehaviour
 
     public float walkSpeed;
     public float runSpeed;
+
+    public TextMeshProUGUI promptText;
+
     private bool allowMovement;
 
     // Start is called before the first frame update

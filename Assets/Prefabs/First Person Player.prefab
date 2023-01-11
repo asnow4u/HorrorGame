@@ -146,6 +146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 7
   runSpeed: 10
+  promptText: {fileID: 0}
 --- !u!54 &762125442
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -173,6 +174,6 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 5.8
+  m_Height: 4.036309
   m_Direction: 1
-  m_Center: {x: 0, y: -0.61622906, z: 0}
+  m_Center: {x: 0, y: -1.4980748, z: 0}

@@ -2409,6 +2409,10 @@ PrefabInstance:
       propertyPath: m_Center.y
       value: -1.4980748
       objectReference: {fileID: 0}
+    - target: {fileID: 3954374022355539623, guid: ae8ee8eed0a676049a77cd3b958933a9, type: 3}
+      propertyPath: promptText
+      value: 
+      objectReference: {fileID: 246208930}
     - target: {fileID: 5670275562891245701, guid: ae8ee8eed0a676049a77cd3b958933a9, type: 3}
       propertyPath: m_RootOrder
       value: 2
