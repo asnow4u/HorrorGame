@@ -138,7 +138,7 @@ public partial class SkeletonStateManager : MonoBehaviour
 
             if (hidingSpot != null)
             {
-                skeletonMovement.SetTarget(hidingSpot.GetSkeletonSearchSpot().position);
+                skeletonMovement.SetTarget(hidingSpot.SkeletonSearchSpot.position);
                 
                 //Chnage State
                 wanderState = WanderState.hidingSpotSearch;

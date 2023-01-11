@@ -17,6 +17,7 @@ public class WardrobeHidingSpot : HidingSpot
     void Start()
     {
         parent = transform.parent;
+
     }
 
     private void Update()
@@ -61,14 +62,9 @@ public class WardrobeHidingSpot : HidingSpot
         //(1) Open Action
         else if (playerCollision && !isOpen && !isPlayerHiding && !delayTimer)
         {
-            //Panel On
-            UIController.instance.ToggleOpenPanel(true);
 
             if (Input.GetKey(KeyCode.E))
             {
-                //Panel Off
-                UIController.instance.ToggleOpenPanel(false);
-
                 //Open Doors
                 foreach (DoorController door in parent.GetComponents<DoorController>())
                 {
@@ -87,13 +83,9 @@ public class WardrobeHidingSpot : HidingSpot
         //(2) Hide Action
         else if (playerCollision && isOpen && !isPlayerHiding && !delayTimer)
         {
-            //Panel On
-            UIController.instance.ToggleHidePanel(true);
 
             if (Input.GetKey(KeyCode.E))
             {
-                //Panel Off
-                UIController.instance.ToggleHidePanel(false);
                 
                 //Keyframe Animation
                 PlayerController.instance.ToggleMovement(false);
@@ -117,13 +109,9 @@ public class WardrobeHidingSpot : HidingSpot
         //(3) Leave
         else if (!isOpen && isPlayerHiding && !delayTimer)
         {
-            //Panel On
-            UIController.instance.ToggleLeavePanel(true);
 
             if (Input.GetKey(KeyCode.E))
             {
-                //Panel Off
-                UIController.instance.ToggleLeavePanel(false);
 
                 //Open Doors
                 foreach (DoorController door in parent.GetComponents<DoorController>())

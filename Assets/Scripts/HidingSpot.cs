@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class HidingSpot : MonoBehaviour
 {
@@ -14,11 +15,14 @@ public class HidingSpot : MonoBehaviour
     private KeyFrameData data;
 
 
-    public Transform GetSkeletonSearchSpot()
+    #region Getter / Setter
+    
+    public Transform SkeletonSearchSpot
     {
-        return skeletonSearchSpot;
+        get { return skeletonSearchSpot; }
     }
 
+    #endregion
 
     private class KeyFrameData
     {
@@ -48,6 +52,7 @@ public class HidingSpot : MonoBehaviour
     {
         get { return isPlayerHiding; }
     }
+
 
     protected IEnumerator KeyFrameMovement(Transform target, List<Transform> frames, List<float> durations)
     {

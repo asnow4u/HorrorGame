@@ -153,7 +153,7 @@ public partial class SkeletonStateManager : MonoBehaviour
             {
                 Debug.Log("Skeleton: Search hunt hiding spot " + huntHidingSpot.name);
 
-                skeleton.GetComponent<SkeletonMovement>().SetTarget(huntHidingSpot.GetSkeletonSearchSpot().position);
+                skeleton.GetComponent<SkeletonMovement>().SetTarget(huntHidingSpot.SkeletonSearchSpot.position);
                 huntState = HuntState.hidingSpotSearch;
                 Debug.Log("Skeleton: HuntState change to HidingSpotSearch");
             }
