@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class PlayerController : MonoBehaviour
     private bool allowMovement;
 
     // Start is called before the first frame update
-    void Awake()
+    private void Awake()
     {
         if (instance == null)
         {
@@ -31,37 +32,6 @@ public class PlayerController : MonoBehaviour
 
         allowMovement = true;
     }
-
-
-    #region Getter / Setter
-
-    public Camera MainCamera
-    {
-        get { return mainCamera; }
-    }
-
-
-    public void ToggleMovement(bool allowed)
-    {
-        allowMovement = allowed;
-        GetComponent<Rigidbody>().useGravity = allowed;
-        GetComponent<Collider>().enabled = allowed;
-    }
-
-
-    public bool InViewOfCamera(Vector3 pos)
-    {
-        Vector3 viewPortPos = MainCamera.WorldToViewportPoint(pos);
-        if (viewPortPos.z > 0 && (new Rect(0, 0, 1, 1)).Contains(viewPortPos))
-        {
-            return true; 
-        }
-
-        return false;
-    }
-
-    #endregion
-
 
     private void Update()
     {
@@ -86,7 +56,7 @@ public class PlayerController : MonoBehaviour
         ObjectRayCast();
     }
 
-    private void ObjectRayCast ()
+    private void ObjectRayCast()
     {
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
@@ -104,6 +74,57 @@ public class PlayerController : MonoBehaviour
                 controllers[i].force = 50;
                 controllers[i].forceOpen = true;
             }
+        }
+    }
+
+
+    /// <summary>
+    /// Enable or disable movement
+    /// </summary>
+    /// <param name="allowed"></param>
+    public void ToggleMovement(bool allowed)
+    {
+        allowMovement = allowed;
+        GetComponent<Rigidbody>().useGravity = allowed;
+        GetComponent<Collider>().enabled = allowed;
+    }
+
+
+    /// <summary>
+    /// Returns whether the givin position is within line of sight
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
+    public bool InViewOfCamera(Vector3 pos)
+    {
+        Vector3 viewPortPos = Camera.main.WorldToViewportPoint(pos);
+        if (viewPortPos.z > 0 && (new Rect(0, 0, 1, 1)).Contains(viewPortPos))
+        {
+            return true; 
+        }
+
+        return false;
+    }
+
+
+    /// <summary>
+    /// Called when the skeleton has captured the player
+    /// </summary>
+    public void PlayerCaught()
+    {
+        Debug.Log("YOU DIED!");
+        SceneManager.LoadScene("Main");
+    }
+    
+
+
+
+
+    public void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.tag == "Skeleman")
+        {
+            PlayerCaught();
         }
     }
 }

@@ -20,19 +20,6 @@ public class SkeletonMovement : MonoBehaviour
         navAgent = GetComponent<NavMeshAgent>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //if (arrived == false)
-        //{
-        //    if (navAgent.remainingDistance <= navAgent.stoppingDistance)
-        //    {
-        //        Debug.Log("Arrived is set to true");
-        //        arrived = true;
-        //    }
-        //}
-    }
-
 
     #region
 

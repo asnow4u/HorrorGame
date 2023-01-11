@@ -142,9 +142,9 @@ public partial class SkeletonStateManager : MonoBehaviour
         if (curState == State.wander || curState == State.hunt || curState == State.chase)
         {
 
-            Vector3 rayVector = PlayerController.instance.MainCamera.transform.position - skeletonHead.position;
+            Vector3 rayVector = Camera.main.transform.position - skeletonHead.position;
 
-            Debug.DrawLine(skeletonHead.position, PlayerController.instance.MainCamera.transform.position);
+            Debug.DrawLine(skeletonHead.position, Camera.main.transform.position);
 
             //Check for angle
             float angle = Vector3.Angle(-skeletonHead.transform.up, rayVector);
