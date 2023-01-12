@@ -72,12 +72,21 @@ public class PlayerController : MonoBehaviour
 
             Debug.Log("You have this many door controllers: " + controllers.Length);
 
+            
+            //TODO: Use promptText variable
+            //      => Set its text
+            //      => Set it active
 
-            for (int i = 0; i < controllers.Length; i++)
-            {
-                controllers[i].force = 50;
-                controllers[i].forceOpen = true;
-            }
+
+            //TODO: Determine if E button is pressed
+
+            //TODO: Use below code to open the door
+
+            //for (int i = 0; i < controllers.Length; i++)
+            //{
+            //    controllers[i].force = 50;
+            //    controllers[i].forceOpen = true;
+            //}
         }
     }
 
