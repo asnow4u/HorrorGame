@@ -70,23 +70,40 @@ public class PlayerController : MonoBehaviour
 
             DoorController[] controllers = hit.transform.GetComponentsInChildren<DoorController>();
 
-            Debug.Log("You have this many door controllers: " + controllers.Length);
-
-            
-            //TODO: Use promptText variable
-            //      => Set its text
-            //      => Set it active
+            //Debug.Log("You have this many door controllers: " + controllers.Length);
 
 
-            //TODO: Determine if E button is pressed
+            if (controllers.Length > 0) {
+                promptText.SetText("Press 'E' to use.");
+                promptText.gameObject.SetActive(true);
 
-            //TODO: Use below code to open the door
-
-            //for (int i = 0; i < controllers.Length; i++)
-            //{
-            //    controllers[i].force = 50;
-            //    controllers[i].forceOpen = true;
-            //}
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    Vector3 dir = transform.InverseTransformPoint(transform.position);
+                    
+                    if (dir.x > 0) {
+                        for (int i = 0; i < controllers.Length; i++)
+                        {
+                            controllers[i].force = 50;
+                            controllers[i].forceOpen = true;
+                            Debug.Log("x greater than zero");
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < controllers.Length; i++)
+                        {
+                            controllers[i].force = -50;
+                            controllers[i].forceOpen = true;
+                            Debug.Log("Everything else");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                promptText.gameObject.SetActive(false);
+            }
         }
     }
 

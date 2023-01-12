@@ -1356,7 +1356,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Activate
+  m_text: Use
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2408,6 +2408,10 @@ PrefabInstance:
     - target: {fileID: 762125441, guid: ae8ee8eed0a676049a77cd3b958933a9, type: 3}
       propertyPath: m_Center.y
       value: -1.4980748
+      objectReference: {fileID: 0}
+    - target: {fileID: 963194229, guid: ae8ee8eed0a676049a77cd3b958933a9, type: 3}
+      propertyPath: mouseSensitivity
+      value: 550
       objectReference: {fileID: 0}
     - target: {fileID: 3954374022355539623, guid: ae8ee8eed0a676049a77cd3b958933a9, type: 3}
       propertyPath: promptText
