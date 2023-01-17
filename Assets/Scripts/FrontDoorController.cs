@@ -35,7 +35,7 @@ public class FrontDoorController : MonoBehaviour
 
                     if (Input.GetKey(KeyCode.E))
                     {
-                        controller.Force(5); //TODO: Play with the force value
+                        //controller.Force(5); //TODO: Play with the force value
                         rb.isKinematic = false;
                     }
                 }

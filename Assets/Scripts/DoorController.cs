@@ -18,9 +18,7 @@ public class DoorController : MonoBehaviour
     //Spring
     private float springForce;
 
-    //Debug
-    public float force;
-    public bool forceOpen;
+    private bool isOpen;
 
 
     // Start is called before the first frame update
@@ -36,34 +34,53 @@ public class DoorController : MonoBehaviour
 
         //Spring
         springForce = hinge.spring.spring;
-    }
+    }  
 
-    private void Update()
-    {
-        if (forceOpen)
-        {
-            forceOpen = false;
-            Force(force);
-        }
-    }
-    
 
-    public void Force(float openForce)
+    public void Force(float force, Vector3 pos)
     {
         JointSpring spring = new JointSpring();
+        JointLimits limit = new JointLimits();
 
-        if (openForce > 0)
+        //Close Door
+        if (isOpen)
         {
-            spring.targetPosition = minLimit;
-            spring.spring = Mathf.Abs(openForce);
+            if (door.rotation.z < 0)
+            {
+                limit.min = 0;
+                limit.max = maxLimit;
+            }
+
+            else
+            {
+                limit.max = 0;
+                limit.min = minLimit;
+            }
+
+            spring.targetPosition = 0;
         }
 
+        //Open Door
         else
         {
-            spring.targetPosition = maxLimit;
-            spring.spring = Mathf.Abs(openForce);
-        }
+            Vector3 dir = transform.InverseTransformPoint(pos);
+            limit.min = minLimit;
+            limit.max = maxLimit;
+            
+            if (dir.x > 0)
+            {
+                spring.targetPosition = minLimit;
+            }
+            else
+            {
+                spring.targetPosition = maxLimit;                
+            }
+        }              
 
+        isOpen = !isOpen;
+        spring.spring = Mathf.Abs(force);
+
+        hinge.limits = limit;
         hinge.spring = spring;
         hinge.useSpring = true;
     }
@@ -71,7 +88,7 @@ public class DoorController : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Skeleman" || col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Skeleman" /*|| col.gameObject.tag == "Player"*/)
         {
             JointLimits limit = new JointLimits();
             limit.min = minLimit;
@@ -132,7 +149,7 @@ public class DoorController : MonoBehaviour
     private void OnTriggerExit(Collider col)
     {
         
-        if (col.gameObject.tag == "Skeleman" || col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Skeleman" /*|| col.gameObject.tag == "Player"*/)
         {
             JointSpring spring = new JointSpring();
             JointLimits limit = new JointLimits();

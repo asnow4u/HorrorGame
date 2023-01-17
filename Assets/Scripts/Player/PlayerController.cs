@@ -79,24 +79,9 @@ public class PlayerController : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    Vector3 dir = transform.InverseTransformPoint(transform.position);
-                    
-                    if (dir.x > 0) {
-                        for (int i = 0; i < controllers.Length; i++)
-                        {
-                            controllers[i].force = 50;
-                            controllers[i].forceOpen = true;
-                            Debug.Log("x greater than zero");
-                        }
-                    }
-                    else
+                    for (int i = 0; i < controllers.Length; i++)
                     {
-                        for (int i = 0; i < controllers.Length; i++)
-                        {
-                            controllers[i].force = -50;
-                            controllers[i].forceOpen = true;
-                            Debug.Log("Everything else");
-                        }
+                        controllers[i].Force(50, transform.position);
                     }
                 }
             }

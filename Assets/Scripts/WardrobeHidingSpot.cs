@@ -29,7 +29,7 @@ public class WardrobeHidingSpot : HidingSpot
                 //Close Doors
                 foreach (DoorController door in parent.GetComponents<DoorController>())
                 {
-                    door.Force(15f);
+                    //door.Force(15f);
                 }
 
                 //Update Bool
@@ -46,7 +46,7 @@ public class WardrobeHidingSpot : HidingSpot
                 //Close Doors
                 foreach (DoorController door in parent.GetComponents<DoorController>())
                 {
-                    door.Force(15f);
+                    //door.Force(15f);
                 }
 
                 //Toggle Movement
@@ -68,7 +68,7 @@ public class WardrobeHidingSpot : HidingSpot
                 //Open Doors
                 foreach (DoorController door in parent.GetComponents<DoorController>())
                 {
-                    door.Force(-15f);
+                    //door.Force(-15f);
                 }
 
                 //Bool Update
@@ -116,7 +116,7 @@ public class WardrobeHidingSpot : HidingSpot
                 //Open Doors
                 foreach (DoorController door in parent.GetComponents<DoorController>())
                 {
-                    door.Force(-15f);
+                    //door.Force(-15f);
                 }
 
                 //Keyframe Animation
@@ -171,7 +171,7 @@ public class WardrobeHidingSpot : HidingSpot
                 isOpen = false;
                 foreach (DoorController door in parent.GetComponents<DoorController>())
                 {
-                    door.Force(15f);
+                    //door.Force(15f);
                 }
             }
         }
