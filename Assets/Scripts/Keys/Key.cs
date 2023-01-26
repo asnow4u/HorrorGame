@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Key : MonoBehaviour
 {
-    public bool isGold;
+    private GameObject go;
 
-
+    public Key(GameObject key)
+    {
+        this.go = key;
+    }
 }

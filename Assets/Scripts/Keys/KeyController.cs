@@ -5,6 +5,10 @@ using UnityEngine;
 public class KeyController : MonoBehaviour
 {
     public static KeyController instance;
+    public List<Transform> keyLocations;
+    public List<Key> keys;
+    public int numberOfKeys;
+    public GameObject keyPrefab;
 
 
     private void Awake()
@@ -22,6 +26,8 @@ public class KeyController : MonoBehaviour
 
     void Start()
     {
+        keys = new List<Key>();
+
         SpawnKeys();
     }
 
@@ -29,5 +35,17 @@ public class KeyController : MonoBehaviour
 
     public void SpawnKeys()
     {
+        for (int i = 0; i < numberOfKeys; i++)
+        {
+            int rand = Random.Range(0, keyLocations.Count);
+            GameObject go = Instantiate(keyPrefab);
+            Transform trans = keyLocations[rand];
+            go.transform.position = trans.position;
+            go.transform.rotation = trans.rotation;
+
+            Key k = new Key(go);
+
+            keys.Add(k);
+        }
     }
 }
