@@ -75,6 +75,9 @@ public class DoorController : MonoBehaviour
             {
                 spring.targetPosition = maxLimit;                
             }
+
+            //Need a timer here, coroutine timer
+
         }              
 
         isOpen = !isOpen;

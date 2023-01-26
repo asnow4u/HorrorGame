@@ -63,14 +63,14 @@ public class PlayerController : MonoBehaviour
     private void ObjectRayCast()
     {
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 2f))
         {
-            //Debug.Log(hit.transform.name);
-            Debug.DrawLine(Camera.main.transform.position, hit.point, Color.blue);
+            Debug.Log(hit.transform.name);
+            //Debug.DrawLine(Camera.main.transform.position, hit.point, Color.blue);
 
-            DoorController[] controllers = hit.transform.GetComponentsInChildren<DoorController>();
+            DoorController[] controllers = hit.transform.GetComponentsInParent<DoorController>();
 
-            //Debug.Log("You have this many door controllers: " + controllers.Length);
+            Debug.Log("You have this many door controllers: " + controllers.Length);
 
 
             if (controllers.Length > 0) {
@@ -89,6 +89,10 @@ public class PlayerController : MonoBehaviour
             {
                 promptText.gameObject.SetActive(false);
             }
+        }
+        else
+        {
+            promptText.gameObject.SetActive(false);
         }
     }
 
