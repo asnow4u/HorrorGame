@@ -27,42 +27,42 @@ public class UIController : MonoBehaviour
     
     public void ToggleKeyPanel(bool active)
     {
-        keyPanel.SetActive(active);
+        //keyPanel.SetActive(active);
     }
     public void ToggleOpenPanel(bool active)
     {
-        openPanel.SetActive(active);
+        //openPanel.SetActive(active);
     }
 
     public void ToggleHidePanel(bool active)
     {
-        hidePanel.SetActive(active);
+        //hidePanel.SetActive(active);
     }
 
     public void ToggleLeavePanel(bool active)
     {
-        leavePanel.SetActive(active);
+        //leavePanel.SetActive(active);
     }
 
     public void ToggleTurnOnPanel(bool active)
     {
-        turnOnPanel.SetActive(active);
+        //turnOnPanel.SetActive(active);
     }
 
     public void ToggleTurnOffPanel(bool active)
     {
-        turnOffPanel.SetActive(active);
+        //turnOffPanel.SetActive(active);
     }
 
 
 
     public void ClearPanel()
     {
-        ToggleKeyPanel(false);
-        ToggleOpenPanel(false);
-        ToggleHidePanel(false);
-        ToggleLeavePanel(false);
-        ToggleTurnOnPanel(false);
-        ToggleTurnOffPanel(false);
+        //ToggleKeyPanel(false);
+        //ToggleOpenPanel(false);
+        //ToggleHidePanel(false);
+        //ToggleLeavePanel(false);
+        //ToggleTurnOnPanel(false);
+        //ToggleTurnOffPanel(false);
     }
 }

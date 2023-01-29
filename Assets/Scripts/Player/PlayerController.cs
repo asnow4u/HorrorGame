@@ -17,6 +17,11 @@ public class PlayerController : MonoBehaviour
 
     private bool allowMovement;
 
+    [Header("Hiding Spot")]
+    public HidingSpot curHidingSpot;
+    public bool hidingAnimationPlaying; //TODO: get from actual animation controller
+
+
     // Start is called before the first frame update
     private void Awake()
     {

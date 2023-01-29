@@ -90,6 +90,8 @@ public class HidingSpot : MonoBehaviour
             data.curDuration += durations[i];
             data.curFrame = i;
         }
+
+        PlayerController.instance.hidingAnimationPlaying = false;
     }
 
 

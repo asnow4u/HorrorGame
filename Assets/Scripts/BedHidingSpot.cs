@@ -45,6 +45,8 @@ public class BedHidingSpot : HidingSpot
 
                 //Bool Update
                 isPlayerHiding = true;
+                PlayerController.instance.curHidingSpot = this;
+                PlayerController.instance.hidingAnimationPlaying = true;
 
                 //Delay
                 float totalTime = 0;
@@ -74,6 +76,8 @@ public class BedHidingSpot : HidingSpot
                 //Update Bool
                 isPlayerHiding = false;
                 leaveAnimationPlaying = true;
+
+                PlayerController.instance.curHidingSpot = null;                
 
                 //Delay
                 float totalTime = 0;

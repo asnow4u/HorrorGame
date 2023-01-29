@@ -119,13 +119,16 @@ public partial class SkeletonStateManager : MonoBehaviour
         else
         {
             ChangeState(State.hunt);
-            Debug.Log("Skeleton: State change to hunt");
         }
     }
 
 
     private void ChaseSearchRoom()
     {
+        //TODO: Look around for player
+        //if player is in process of hiding search that hiding spot
+        
+
         //Search where player is hiding
         HidingSpot hidingSpot = RoomController.instance.SkeletonRoom.GetRandomHidingSpotWithOutPlayer();
                
@@ -139,7 +142,6 @@ public partial class SkeletonStateManager : MonoBehaviour
         else
         {
             ChangeState(State.hunt);
-            Debug.Log("Skeleton: State change to hunt");
             StartCoroutine(Wait(wanderIdleRoomTimer));
         }
     }
@@ -154,7 +156,6 @@ public partial class SkeletonStateManager : MonoBehaviour
         //}
 
         ChangeState(State.hunt);
-        Debug.Log("Skeleton: State change to hunt");
         StartCoroutine(Wait(searchHidingSpotTimer));
     }
 }

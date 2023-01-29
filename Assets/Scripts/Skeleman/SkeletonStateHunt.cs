@@ -99,7 +99,6 @@ public partial class SkeletonStateManager : MonoBehaviour
         LightManager.instance.ChangeToHunt();
 
         huntState = HuntState.hunt;
-        Debug.Log("Skeleton: HuntState change to Hunt");
     }
 
 
@@ -191,7 +190,6 @@ public partial class SkeletonStateManager : MonoBehaviour
         LightManager.instance.ChangeToNormal();
 
         ChangeState(State.wander);
-        Debug.Log("Skeleton: WanderState change to StartWander");
     }
 
 
@@ -253,8 +251,6 @@ public partial class SkeletonStateManager : MonoBehaviour
             if (huntTimer <= 0)
             {
                 ChangeState(State.hunt);
-                Debug.Log("Skeleton: State Change to Hunt");
-
                 huntTimer = Random.Range(huntTimeMin, huntTimeMax);
             }
 

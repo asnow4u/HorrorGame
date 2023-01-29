@@ -77,10 +77,7 @@ public partial class SkeletonStateManager : MonoBehaviour
         if (!gameStarted) return;
 
         //Check for player in sight
-        if (curState != State.chase && CheckForPlayer())
-        {
-            ChangeState(State.chase);
-        }
+        CheckForPlayer();
         
         CheckHuntTimer();       
 
@@ -122,6 +119,8 @@ public partial class SkeletonStateManager : MonoBehaviour
     /// <param name="state"></param>
     public void ChangeState(State state)
     {
+        Debug.Log("Skeleton: State change to " + state.ToString());
+
         curState = state;
 
         wanderState = WanderState.startWander;
@@ -139,6 +138,11 @@ public partial class SkeletonStateManager : MonoBehaviour
     /// <returns></returns>
     public bool CheckForPlayer()
     {
+        if (PlayerController.instance.curHidingSpot != null || PlayerController.instance.hidingAnimationPlaying)
+        {
+            return false;
+        }
+
         if (curState == State.wander || curState == State.hunt || curState == State.chase)
         {
 
@@ -167,6 +171,11 @@ public partial class SkeletonStateManager : MonoBehaviour
                         if (curState != State.chase)
                         {
                             ChangeState(State.chase);
+                        }
+
+                        else
+                        {
+                            chaseState = ChaseState.chase;
                         }
 
                         return true;
