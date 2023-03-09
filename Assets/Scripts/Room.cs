@@ -8,7 +8,6 @@ public class Room : MonoBehaviour
     [SerializeField] private RoomController.RoomType type;
     [SerializeField] private List<Light> lights;
 
-    private List<Transform> keySpots;
     private List<HidingSpot> hidingSpots;
     private List<Transform> dormantSpots;
     private List<Transform> wanderSpots;
@@ -17,17 +16,8 @@ public class Room : MonoBehaviour
 
     private void Awake()
     {
-
-        keySpots = new List<Transform>();
         dormantSpots = new List<Transform>();
         wanderSpots = new List<Transform>();
-
-        //Get all key locations
-        Transform key = transform.Find("Keys");
-        foreach (Transform child in key)
-        {
-            keySpots.Add(child);
-        }
 
         Transform loc = transform.Find("Locations");
 
@@ -77,11 +67,6 @@ public class Room : MonoBehaviour
     public List<HidingSpot> HidingSpots
     {
         get { return hidingSpots; }
-    }
-
-    public List<Transform> Keys
-    {
-        get { return keySpots; }
     }
 
     public List<Transform> DormantSpots

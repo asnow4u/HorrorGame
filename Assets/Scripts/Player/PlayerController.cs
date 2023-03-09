@@ -65,34 +65,46 @@ public class PlayerController : MonoBehaviour
         ObjectRayCast();
     }
 
+
     private void ObjectRayCast()
     {
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 2f))
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 2f, ~LayerMask.NameToLayer("Interactable")))
         {
             Debug.Log(hit.transform.name);
-            //Debug.DrawLine(Camera.main.transform.position, hit.point, Color.blue);
 
-            DoorController[] controllers = hit.transform.GetComponentsInParent<DoorController>();
-
-            Debug.Log("You have this many door controllers: " + controllers.Length);
-
-
-            if (controllers.Length > 0) {
-                promptText.SetText("Press 'E' to use.");
-                promptText.gameObject.SetActive(true);
-
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    for (int i = 0; i < controllers.Length; i++)
-                    {
-                        controllers[i].Force(50, transform.position);
-                    }
-                }
-            }
-            else
+            switch (hit.transform.tag)
             {
-                promptText.gameObject.SetActive(false);
+                case "Door":
+                    InteractableDoorPrompt(hit.transform);                   
+                    break;
+
+            }
+        }
+
+        else
+        {
+            promptText.gameObject.SetActive(false);
+        }
+    }
+
+
+    private void InteractableDoorPrompt(Transform hitTransform)
+    {
+        DoorController[] controllers = hitTransform.GetComponentsInParent<DoorController>();
+        Debug.Log("You have this many door controllers: " + controllers.Length);
+
+        if (controllers.Length > 0)
+        {
+            promptText.SetText("Press 'E' to use.");
+            promptText.gameObject.SetActive(true);
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                for (int i = 0; i < controllers.Length; i++)
+                {
+                    controllers[i].Force(50, transform.position);
+                }
             }
         }
         else
@@ -102,10 +114,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// Enable or disable movement
-    /// </summary>
-    /// <param name="allowed"></param>
+
     public void ToggleMovement(bool allowed)
     {
         allowMovement = allowed;
@@ -114,11 +123,6 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// Returns whether the givin position is within line of sight
-    /// </summary>
-    /// <param name="pos"></param>
-    /// <returns></returns>
     public bool InViewOfCamera(Vector3 pos)
     {
         Vector3 viewPortPos = Camera.main.WorldToViewportPoint(pos);

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4963177541740282435}
   - component: {fileID: 4963177541740282492}
   m_Layer: 0
-  m_Name: KeyManager
+  m_Name: SpawnManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,12 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 448ff85679c48fe46b17ce7e72a37467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goldKeyPrefab: {fileID: 6939979709242572716, guid: f81af038f7a48a5499b8d66892faa5a2, type: 3}
-  silverKeyPrefab: {fileID: 3266290581929899280, guid: b2b676a95c3915a4e92769dabd78f0ae, type: 3}
-  goldKeyStartCount: 0
-  silverKeyStartCount: 4
-  goldKeyHeldCount: 0
-  silverKeyHeldCount: 0
-  goldKeyUsedCount: 0
-  silverKeyUsedCount: 0
-  spawnKeys: 0
+  keyLocations: []
+  keys: []
+  numberOfKeys: 0
+  keyPrefab: {fileID: 0}
