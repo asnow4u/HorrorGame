@@ -40,6 +40,7 @@ public class KeyController : MonoBehaviour
             int rand = Random.Range(0, keyLocations.Count);
             GameObject go = Instantiate(keyPrefab);
             Transform trans = keyLocations[rand];
+            keyLocations.RemoveAt(rand);
             go.transform.position = trans.position;
             go.transform.rotation = trans.rotation;
 
