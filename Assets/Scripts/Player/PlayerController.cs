@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
 
     public TextMeshProUGUI promptText;
 
+    private Items heldItem;
+
     private bool allowMovement;
 
     [Header("Hiding Spot")]
@@ -78,6 +80,10 @@ public class PlayerController : MonoBehaviour
                 case "Door":
                     InteractableDoorPrompt(hit.transform);                   
                     break;
+                
+                case "Item":
+                    InteractableItemPrompt(hit.transform);
+                    break;
 
             }
         }
@@ -113,7 +119,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void InteractableItemPrompt(Transform hitTransform)
+    {
+        promptText.SetText("Press 'E' to pick up.");
+        promptText.gameObject.SetActive(true);
 
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            heldItem = hitTransform.GetComponent<Items>();
+
+            heldItem.HideItem();
+
+            //promptText.gameObject.SetActive(false);
+        }
+        
+    }
 
     public void ToggleMovement(bool allowed)
     {
