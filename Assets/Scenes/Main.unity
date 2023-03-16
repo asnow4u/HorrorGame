@@ -20692,7 +20692,7 @@ PrefabInstance:
     - target: {fileID: 4963177541740282492, guid: ccd3c42de84e7da43a0e77782b331a99, type: 3}
       propertyPath: batteryPrefab
       value: 
-      objectReference: {fileID: 3266290581929899280, guid: b2b676a95c3915a4e92769dabd78f0ae, type: 3}
+      objectReference: {fileID: 682864456760797134, guid: 4c4fffe911d8ecc409f73f327b2201f8, type: 3}
     - target: {fileID: 4963177541740282492, guid: ccd3c42de84e7da43a0e77782b331a99, type: 3}
       propertyPath: numberOfBatteries
       value: 2
