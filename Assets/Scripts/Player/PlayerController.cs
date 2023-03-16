@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
     private void ObjectRayCast()
     {
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 2f, ~LayerMask.NameToLayer("Interactable")))
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 3f, ~LayerMask.NameToLayer("Interactable")))
         {
             Debug.Log(hit.transform.name);
 
@@ -126,13 +126,28 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            heldItem = hitTransform.GetComponent<Items>();
+            if (heldItem != null)
+            {
+                Vector3 dropItemPos = new Vector3(transform.position.x, heldItem.itemHeight, transform.position.z);
+                
+                heldItem.transform.position = dropItemPos;
+                Debug.Log("item height is:" + heldItem.itemHeight);
+                
+                heldItem.ShowItem();
 
-            heldItem.HideItem();
+                heldItem = hitTransform.GetComponent<Items>();
+
+                heldItem.HideItem();
+            }
+            else
+            {
+                heldItem = hitTransform.GetComponent<Items>();
+
+                heldItem.HideItem();
+            }
 
             //promptText.gameObject.SetActive(false);
         }
-        
     }
 
     public void ToggleMovement(bool allowed)

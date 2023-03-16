@@ -5,13 +5,15 @@ using UnityEngine;
 public class Items : MonoBehaviour
 {
     public float ySpeed = 50;
-    
-    
+    public float itemHeight = -100f;
+
+
     // Start is called before the first frame update
     void Start()
     {
         gameObject.layer = LayerMask.NameToLayer("Interactable");
         gameObject.tag = "Item";
+        itemHeight = -1.5f;
     }
 
     // Update is called once per frame
