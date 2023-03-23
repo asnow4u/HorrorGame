@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     public TextMeshProUGUI promptText;
 
-    private Items heldItem;
+    public Items heldItem;
 
     private bool allowMovement;
 
