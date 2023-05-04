@@ -4,5 +4,7 @@ using UnityEngine;
 
 public class Key : Items
 {
-   
+    public bool theONE = false;
+
+    
 }

@@ -12,6 +12,9 @@ public class ItemSpawnController : MonoBehaviour
     public List<Transform> locations;
     public int numberOfKeys;
     public int numberOfBatteries;
+    public int numBeforeTheONE;
+
+    private int usedKeyCounter;
     
     private List<Key> keys;
     private List<Battery> batteries;
@@ -34,7 +37,7 @@ public class ItemSpawnController : MonoBehaviour
     {
         if (locations.Count < (numberOfKeys + numberOfBatteries))
         {
-            Debug.LogError("To Many Keys and Batteries for Locations provided");
+            Debug.LogError("Too Many Keys and Batteries for Locations provided");
         }
 
         keys = new List<Key>();
@@ -60,6 +63,22 @@ public class ItemSpawnController : MonoBehaviour
             Key k = go.AddComponent<Key>();
 
             keys.Add(k);
+            k.destroyItemEvent += K_destroyItemEvent;
+        }
+    }
+
+    private void K_destroyItemEvent(Items item)
+    {
+        if(item.TryGetComponent<Key>(out Key key))
+        {
+            keys.Remove(key);
+            usedKeyCounter ++;
+
+            if(usedKeyCounter == numBeforeTheONE)
+            {
+                int rand = Random.Range(0, keys.Count);
+                keys[rand].theONE = true;
+            }
         }
     }
 
@@ -77,6 +96,15 @@ public class ItemSpawnController : MonoBehaviour
             Battery battery = go.AddComponent<Battery>();
 
             batteries.Add(battery);
+            battery.destroyItemEvent += Battery_destroyItemEvent;
+        }
+    }
+
+    private void Battery_destroyItemEvent(Items item)
+    {
+        if (item.TryGetComponent<Battery>(out Battery battery))
+        {
+            batteries.Remove(battery);
         }
     }
 }

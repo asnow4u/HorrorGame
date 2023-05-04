@@ -48,7 +48,7 @@ public class Flashlight : MonoBehaviour
                 if (holding.TryGetComponent<Battery>(out Battery battery))
                 {
                     battLife = 100;
-                    PlayerController.instance.heldItem = null;
+                    holding.DestroyItem();
                 }
             }
         }

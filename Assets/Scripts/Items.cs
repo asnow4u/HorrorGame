@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class Items : MonoBehaviour
 {
     public float ySpeed = 50;
     public float itemHeight = -100f;
+    public event Action<Items> destroyItemEvent;
 
 
     // Start is called before the first frame update
@@ -38,5 +40,11 @@ public class Items : MonoBehaviour
 
         rend.enabled = true;
         col.enabled = true;
+    }
+
+    public void DestroyItem()
+    {
+        destroyItemEvent?.Invoke(this);
+        Destroy(gameObject);
     }
 }
