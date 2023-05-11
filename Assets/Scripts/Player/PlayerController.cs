@@ -85,6 +85,9 @@ public class PlayerController : MonoBehaviour
                     InteractableItemPrompt(hit.transform);
                     break;
 
+                case "EscapeDoor":
+                    InteractableEscapeDoorPrompt(hit.transform);
+                    break;
             }
         }
 
@@ -147,6 +150,48 @@ public class PlayerController : MonoBehaviour
             }
 
             //promptText.gameObject.SetActive(false);
+        }
+    }
+
+    private void InteractableEscapeDoorPrompt(Transform hitTransform)
+    {
+        EscapeDoorController[] controllers = hitTransform.GetComponentsInParent<EscapeDoorController>();
+        Debug.Log("This is the escape door.");
+
+        if (controllers.Length > 0)
+        {
+            
+            
+            if (heldItem != null && heldItem.TryGetComponent<Key>(out Key key))
+            {
+                promptText.SetText("Press 'E' to use.");
+                promptText.gameObject.SetActive(true);
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    for (int i = 0; i < controllers.Length; i++)
+                    {
+                        controllers[i].IsTheOne(key);
+                        heldItem.DestroyItem();
+                        //controllers[i].Force(50, transform.position);
+                    }
+                }
+            }
+            else
+            {
+                //TODO: Determine how we want to prompt player that they need a key not some other item to interact with the door.
+                promptText.SetText("Press 'E' to use.");
+                promptText.gameObject.SetActive(true);
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    
+                }
+            }
+        }
+        else
+        {
+            promptText.gameObject.SetActive(false);
         }
     }
 

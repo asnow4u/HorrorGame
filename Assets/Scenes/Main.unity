@@ -16273,27 +16273,13 @@ GameObject:
   - component: {fileID: 343497881524083888}
   - component: {fileID: 1288337426115069910}
   - component: {fileID: 5476195471768479810}
-  - component: {fileID: 1121265655449372171}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: FrontDoor
-  m_TagString: Untagged
+  m_TagString: EscapeDoor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
---- !u!114 &1121265655449372171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1121265655449372170}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 620006f400e247b4e859b15c8acddbf1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  door: {fileID: 7467947218121514484}
 --- !u!33 &1238011535704816464
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -16357,8 +16343,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.724875, y: 4.5416126, z: 2.4599144}
-  m_Center: {x: -0.34449014, y: 0.08740759, z: -0.061928988}
+  m_Size: {x: 0.86652964, y: 4.5416126, z: 2.4599144}
+  m_Center: {x: -0.2736628, y: 0.08740759, z: -0.061928988}
 --- !u!33 &1292214625226178007
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -20889,6 +20875,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 682864456760797134, guid: 4c4fffe911d8ecc409f73f327b2201f8, type: 3}
     - target: {fileID: 4963177541740282492, guid: ccd3c42de84e7da43a0e77782b331a99, type: 3}
+      propertyPath: numBeforeTheONE
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4963177541740282492, guid: ccd3c42de84e7da43a0e77782b331a99, type: 3}
       propertyPath: numberOfBatteries
       value: 2
       objectReference: {fileID: 0}
@@ -21714,6 +21704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f24162cc7c1fdc9409a64736fc3f2d33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 7467947218121514484}
   animationDelay: 2
 --- !u!33 &5534924736690371668
 MeshFilter:
