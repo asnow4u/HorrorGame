@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class Items : MonoBehaviour
+public class Items : MonoBehaviour, INoise
 {
     public float ySpeed = 50;
     public float itemHeight = -100f;
@@ -46,5 +47,41 @@ public class Items : MonoBehaviour
     {
         destroyItemEvent?.Invoke(this);
         Destroy(gameObject);
+    }
+
+    [ContextMenu("Make Noise")]
+    public void MakeTestNoise()
+    {
+        //todo: Audio clip coming eventually
+        //aSource.Play();
+        INoise[] findingNoise = FindObjectsOfType<MonoBehaviour>()
+            .Where(obj => obj is INoise)
+            .Cast<INoise>()
+            .ToArray();
+
+        foreach (INoise noise in findingNoise)
+        {
+            noise.HeardNoise(transform.position, 10);
+        }
+    }
+    public void MakeNoise(float range, AudioSource aSource)
+    {
+        //todo: Audio clip coming eventually
+        //aSource.Play();
+        INoise[] findingNoise = (INoise[])FindObjectsOfType(typeof(INoise));            
+
+        foreach(INoise noise in findingNoise)
+        {
+            noise.HeardNoise(transform.position, range);
+        }
+    }
+
+    public void HeardNoise(Vector3 pos, float range)
+    {
+        float dist = Vector3.Distance(pos, transform.position);
+        if(dist < range)
+        {
+            Debug.Log("Played Sound");
+        }
     }
 }
