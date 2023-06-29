@@ -46,5 +46,10 @@ public class EscapeDoorController : DoorController
             //TODO: Open the door and victory screech.
             Debug.Log("You have won.");
         }
+        else
+        {
+            key.MakeNoise(5, null);
+            Debug.Log("Wrong Key.");
+        }
     }
 }

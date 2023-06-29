@@ -51,21 +51,7 @@ public class Items : MonoBehaviour, INoise
         Destroy(gameObject);
     }
 
-    [ContextMenu("Make Noise")]
-    public void MakeTestNoise()
-    {
-        //todo: Audio clip coming eventually
-        //aSource.Play();
-        INoise[] findingNoise = FindObjectsOfType<MonoBehaviour>()
-            .Where(obj => obj is INoise)
-            .Cast<INoise>()
-            .ToArray();
-
-        foreach (INoise noise in findingNoise)
-        {
-            noise.HeardNoise(transform.position, 10);
-        }
-    }
+    
     public void MakeNoise(float range, AudioSource aSource)
     {
         //todo: Audio clip coming eventually
