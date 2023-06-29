@@ -70,7 +70,6 @@ public class Items : MonoBehaviour, INoise
     {
         //todo: Audio clip coming eventually
         //aSource.Play();
-        //INoise[] findingNoise = (INoise[])FindObjectsOfType(typeof(INoise));            
 
         INoise[] findingNoise = (GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[])
             .SelectMany(g => g.GetComponents(typeof(INoise)))
