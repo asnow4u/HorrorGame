@@ -41,6 +41,8 @@ public class Items : MonoBehaviour, INoise
 
         rend.enabled = true;
         col.enabled = true;
+
+        MakeNoise(5, null);
     }
 
     public void DestroyItem()

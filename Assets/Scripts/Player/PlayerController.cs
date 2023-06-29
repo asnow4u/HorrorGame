@@ -134,9 +134,11 @@ public class PlayerController : MonoBehaviour
                 Vector3 dropItemPos = new Vector3(transform.position.x, heldItem.itemHeight, transform.position.z);
                 
                 heldItem.transform.position = dropItemPos;
+
                 Debug.Log("item height is:" + heldItem.itemHeight);
                 
                 heldItem.ShowItem();
+
 
                 heldItem = hitTransform.GetComponent<Items>();
 
