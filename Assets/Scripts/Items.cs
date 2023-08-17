@@ -54,19 +54,7 @@ public class Items : MonoBehaviour, INoise
     
     public void MakeNoise(float range, AudioSource aSource)
     {
-        //todo: Audio clip coming eventually
-        //aSource.Play();
-
-        INoise[] findingNoise = (GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[])
-            .SelectMany(g => g.GetComponents(typeof(INoise)))
-            .Cast<INoise>()
-            .ToArray();
-
-
-        foreach (INoise noise in findingNoise)
-        {
-            noise.HeardNoise(transform.position, range);
-        }
+        NoiseCreation.CreateNoise(range, transform.position);
     }
 
     public void HeardNoise(Vector3 pos, float range)

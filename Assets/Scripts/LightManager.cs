@@ -51,7 +51,7 @@ public class LightManager : MonoBehaviour
         {
             if (light.TryGetComponent<LightController>(out controller))
             {
-                StartCoroutine(controller.ChangeColor(huntColor, colorChangeDuration));
+                //StartCoroutine(controller.ChangeColor(huntColor, colorChangeDuration));
             }    
         }
 
@@ -73,7 +73,7 @@ public class LightManager : MonoBehaviour
         {
             if (light.TryGetComponent<LightController>(out controller))
             {
-                StartCoroutine(controller.ChangeColor(normalColor, colorChangeDuration));
+                //StartCoroutine(controller.ChangeColor(normalColor, colorChangeDuration));
             }
         }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightController : MonoBehaviour
+public class LightController : MonoBehaviour, ILight
 {
     [Header("Flicker Properties")]
     [SerializeField] private bool flicker;
@@ -14,7 +14,6 @@ public class LightController : MonoBehaviour
     private float flickerInterval = 0;
 
     private Light light;
-    private bool changeingColor;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +29,6 @@ public class LightController : MonoBehaviour
 
     private void Update()
     {
-        if (changeingColor) return;
 
         //Flicker
         if (flicker)
@@ -63,29 +61,10 @@ public class LightController : MonoBehaviour
     }
 
 
-    public IEnumerator ChangeColor(Color color, float duration)
+    public IEnumerator ChangeColor(Color color)
     {
-        changeingColor = true;
-        float currentIntensity = light.intensity;
         float time = 0;
-
-        //while (light.intensity > 0)
-        //{
-        //    light.intensity = Mathf.Lerp(currentIntensity, 0, time / lightChangeDuration);
-        //    time += Time.deltaTime;
-
-        //    yield return null;
-        //}
-
-        //light.color = color;
-
-        //while (light.intensity < currentIntensity)
-        //{
-        //    light.intensity = Mathf.Lerp(currentIntensity, 0, time / lightChangeDuration);
-        //    time -= Time.deltaTime;
-
-        //    yield return null;
-        //}
+        float duration = 1.5f;
 
         Color currentColor = light.color;
 
@@ -96,10 +75,33 @@ public class LightController : MonoBehaviour
 
             yield return null;
         }
+    }
 
+    [ContextMenu("Turn Off")]
+    public void TurnOff()
+    {
+        light.enabled = false;
+    }
 
-        light.intensity = currentIntensity;
-        changeingColor = false;
+    [ContextMenu("Turn On")]
+    public void TurnOn()
+    {
+        light.enabled = true;
+    }
+
+    public void Flicker(float wavelength, float amplitude, float duration)
+    {
+        
+    }
+
+    [ContextMenu("color change maybe")]
+    public void SetColorBS()
+    {
+        SetColor(Color.blue);
+    }
+    public void SetColor(Color color)
+    {
+        StartCoroutine(ChangeColor(color));
     }
 }
 

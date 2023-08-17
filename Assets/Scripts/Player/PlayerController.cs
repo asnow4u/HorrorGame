@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.Linq;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, INoise
 {
     public static PlayerController instance;
 
@@ -57,6 +58,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
             transform.Translate(dir * runSpeed * Time.deltaTime, Space.World);
+            MakeNoise(5, null);
         }
 
         else
@@ -237,4 +239,11 @@ public class PlayerController : MonoBehaviour
             PlayerCaught();
         }
     }
+
+    public void MakeNoise(float range, AudioSource aSource)
+    {
+        NoiseCreation.CreateNoise(range, transform.position);  
+    }
+
+    public void HeardNoise(Vector3 pos, float range) {}
 }
