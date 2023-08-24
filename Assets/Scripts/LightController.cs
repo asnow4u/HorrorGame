@@ -4,62 +4,15 @@ using UnityEngine;
 
 public class LightController : MonoBehaviour, ILight
 {
-    [Header("Flicker Properties")]
-    [SerializeField] private bool flicker;
-    [SerializeField] float maxFlickerIntensity;
-    [SerializeField] float minFlickerIntensity;
-    [SerializeField] float flickerDuration;
-
-    private bool inFlickerRise = true;
-    private float flickerInterval = 0;
-
     private Light light;
+    private float originalIntensity;
 
     // Start is called before the first frame update
     void Start()
     {
         light = GetComponent<Light>();
-
-        if (flicker)
-        {
-            light.intensity = minFlickerIntensity;
-        }
+        originalIntensity = light.intensity;
     }
-
-
-    private void Update()
-    {
-
-        //Flicker
-        if (flicker)
-        {
-            //Intensity value increasing
-            if (inFlickerRise)
-            {
-                light.intensity = Mathf.Lerp(minFlickerIntensity, maxFlickerIntensity, flickerInterval / flickerDuration);
-                flickerInterval += Time.deltaTime;
-
-                if (flickerInterval > flickerDuration)
-                {
-                    inFlickerRise = false;
-                    flickerInterval = flickerDuration;
-                }
-            }
-
-            else
-            {
-                light.intensity = Mathf.Lerp(minFlickerIntensity, maxFlickerIntensity, flickerInterval / flickerDuration);
-                flickerInterval -= Time.deltaTime;
-
-                if (flickerInterval < 0)
-                {
-                    inFlickerRise = true;
-                    flickerInterval = 0;
-                }
-            }
-        }
-    }
-
 
     public IEnumerator ChangeColor(Color color)
     {
@@ -75,6 +28,23 @@ public class LightController : MonoBehaviour, ILight
 
             yield return null;
         }
+    }
+
+    public IEnumerator Flickering(float wavelength, float amplitude, float duration)
+    {
+        float timer = 0;
+        
+        while(timer < duration)
+        {
+            float intensityMultiplier = Mathf.Sin(2 * Mathf.PI * timer / wavelength) * amplitude + amplitude;
+            light.intensity = originalIntensity * intensityMultiplier;
+
+            timer += Time.deltaTime;
+            
+            yield return null;
+        }
+
+        light.intensity = originalIntensity;            
     }
 
     [ContextMenu("Turn Off")]

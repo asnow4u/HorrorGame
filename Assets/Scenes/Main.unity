@@ -8577,7 +8577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flicker: 1
-  maxFlickerIntensity: 0.9
+  maxFlickerIntensity: 3
   minFlickerIntensity: 0.8
   flickerDuration: 0.3
 --- !u!108 &1330656025
